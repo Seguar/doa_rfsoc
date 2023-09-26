@@ -1,0 +1,396 @@
+
+*** Running vivado
+    with args -log mts_IQ_product_0_0.vds -m64 -product Vivado -mode batch -messageDb vivado.pb -notrace -source mts_IQ_product_0_0.tcl
+
+
+
+****** Vivado v2022.2.2 (64-bit)
+  **** SW Build 3788238 on Tue Feb 21 20:00:34 MST 2023
+  **** IP Build 3783773 on Tue Feb 21 23:41:56 MST 2023
+    ** Copyright 1986-2023 Xilinx, Inc. All Rights Reserved.
+
+source mts_IQ_product_0_0.tcl -notrace
+INFO: [IP_Flow 19-234] Refreshing IP repositories
+WARNING: [IP_Flow 19-2248] Failed to load user IP repository 'c:/Work/FPGA/RFSoC-MTS/ip'; Can't find the specified path.
+If this directory should no longer be in your list of user repositories, go to the IP Settings dialog and remove it.
+INFO: [IP_Flow 19-1700] Loaded user IP repository 'c:/Users/sega-/OneDrive/Documents/Xilinx'.
+INFO: [IP_Flow 19-2313] Loaded Vivado IP repository 'C:/Xilinx/Vivado/2022.2/data/ip'.
+INFO: [IP_Flow 19-6924] IPCACHE: Running cache check for IP inst: mts_IQ_product_0_0
+Command: synth_design -top mts_IQ_product_0_0 -part xczu48dr-ffvg1517-2-e -incremental_mode off -mode out_of_context
+Starting synth_design
+Attempting to get a license for feature 'Synthesis' and/or device 'xczu48dr'
+INFO: [Common 17-349] Got license for feature 'Synthesis' and/or device 'xczu48dr'
+INFO: [Device 21-403] Loading part xczu48dr-ffvg1517-2-e
+INFO: [Synth 8-7079] Multithreading enabled for synth_design using a maximum of 2 processes.
+INFO: [Synth 8-7078] Launching helper process for spawning children vivado processes
+INFO: [Synth 8-7075] Helper process launched with PID 28668
+INFO: [Synth 8-11241] undeclared symbol 'REGCCE', assumed default net type 'wire' [C:/Xilinx/Vivado/2022.2/data/verilog/src/unimacro/BRAM_SINGLE_MACRO.v:2170]
+---------------------------------------------------------------------------------
+Starting RTL Elaboration : Time (s): cpu = 00:00:04 ; elapsed = 00:00:05 . Memory (MB): peak = 2644.465 ; gain = 363.578
+---------------------------------------------------------------------------------
+INFO: [Synth 8-638] synthesizing module 'mts_IQ_product_0_0' [c:/Work/FPGA/RFSoC-MTS/boards/RFSoC4x2/build_mts/mts/mts.gen/sources_1/bd/mts/ip/mts_IQ_product_0_0/synth/mts_IQ_product_0_0.vhd:93]
+INFO: [Synth 8-3491] module 'iq_product' declared at 'c:/Work/FPGA/RFSoC-MTS/boards/RFSoC4x2/build_mts/mts/mts.gen/sources_1/bd/mts/ipshared/6696/hdl/iq_product.vhd:247' bound to instance 'U0' of component 'iq_product' [c:/Work/FPGA/RFSoC-MTS/boards/RFSoC4x2/build_mts/mts/mts.gen/sources_1/bd/mts/ip/mts_IQ_product_0_0/synth/mts_IQ_product_0_0.vhd:224]
+INFO: [Synth 8-638] synthesizing module 'iq_product' [c:/Work/FPGA/RFSoC-MTS/boards/RFSoC4x2/build_mts/mts/mts.gen/sources_1/bd/mts/ipshared/6696/hdl/iq_product.vhd:280]
+INFO: [Synth 8-638] synthesizing module 'iq_product_default_clock_driver' [c:/Work/FPGA/RFSoC-MTS/boards/RFSoC4x2/build_mts/mts/mts.gen/sources_1/bd/mts/ipshared/6696/hdl/iq_product.vhd:227]
+INFO: [Synth 8-638] synthesizing module 'xlclockdriver' [c:/Work/FPGA/RFSoC-MTS/boards/RFSoC4x2/build_mts/mts/mts.gen/sources_1/bd/mts/ipshared/6696/hdl/xlclockdriver_rd.vhd:59]
+	Parameter width bound to: 1 - type: integer 
+	Parameter init_index bound to: 0 - type: integer 
+	Parameter init_value bound to: 4'b0000 
+	Parameter latency bound to: 1 - type: integer 
+INFO: [Synth 8-3491] module 'synth_reg_w_init' declared at 'c:/Work/FPGA/RFSoC-MTS/boards/RFSoC4x2/build_mts/mts/mts.gen/sources_1/bd/mts/ipshared/6696/hdl/synth_reg_w_init.vhd:31' bound to instance 'clr_reg' of component 'synth_reg_w_init' [c:/Work/FPGA/RFSoC-MTS/boards/RFSoC4x2/build_mts/mts/mts.gen/sources_1/bd/mts/ipshared/6696/hdl/xlclockdriver_rd.vhd:236]
+INFO: [Synth 8-638] synthesizing module 'synth_reg_w_init' [c:/Work/FPGA/RFSoC-MTS/boards/RFSoC4x2/build_mts/mts/mts.gen/sources_1/bd/mts/ipshared/6696/hdl/synth_reg_w_init.vhd:47]
+	Parameter width bound to: 1 - type: integer 
+	Parameter init_index bound to: 0 - type: integer 
+	Parameter init_value bound to: 4'b0000 
+INFO: [Synth 8-3491] module 'single_reg_w_init' declared at 'c:/Work/FPGA/RFSoC-MTS/boards/RFSoC4x2/build_mts/mts/mts.gen/sources_1/bd/mts/ipshared/6696/hdl/single_reg_w_init.vhd:22' bound to instance 'reg_comp' of component 'single_reg_w_init' [c:/Work/FPGA/RFSoC-MTS/boards/RFSoC4x2/build_mts/mts/mts.gen/sources_1/bd/mts/ipshared/6696/hdl/synth_reg_w_init.vhd:79]
+INFO: [Synth 8-638] synthesizing module 'single_reg_w_init' [c:/Work/FPGA/RFSoC-MTS/boards/RFSoC4x2/build_mts/mts/mts.gen/sources_1/bd/mts/ipshared/6696/hdl/single_reg_w_init.vhd:37]
+INFO: [Synth 8-113] binding component instance 'fdre_comp' to cell 'FDRE' [c:/Work/FPGA/RFSoC-MTS/boards/RFSoC4x2/build_mts/mts/mts.gen/sources_1/bd/mts/ipshared/6696/hdl/single_reg_w_init.vhd:86]
+INFO: [Synth 8-256] done synthesizing module 'single_reg_w_init' (0#1) [c:/Work/FPGA/RFSoC-MTS/boards/RFSoC4x2/build_mts/mts/mts.gen/sources_1/bd/mts/ipshared/6696/hdl/single_reg_w_init.vhd:37]
+INFO: [Synth 8-256] done synthesizing module 'synth_reg_w_init' (0#1) [c:/Work/FPGA/RFSoC-MTS/boards/RFSoC4x2/build_mts/mts/mts.gen/sources_1/bd/mts/ipshared/6696/hdl/synth_reg_w_init.vhd:47]
+INFO: [Synth 8-256] done synthesizing module 'xlclockdriver' (0#1) [c:/Work/FPGA/RFSoC-MTS/boards/RFSoC4x2/build_mts/mts/mts.gen/sources_1/bd/mts/ipshared/6696/hdl/xlclockdriver_rd.vhd:59]
+INFO: [Synth 8-256] done synthesizing module 'iq_product_default_clock_driver' (0#1) [c:/Work/FPGA/RFSoC-MTS/boards/RFSoC4x2/build_mts/mts/mts.gen/sources_1/bd/mts/ipshared/6696/hdl/iq_product.vhd:227]
+INFO: [Synth 8-638] synthesizing module 'iq_product_struct' [c:/Work/FPGA/RFSoC-MTS/boards/RFSoC4x2/build_mts/mts/mts.gen/sources_1/bd/mts/ipshared/6696/hdl/iq_product.vhd:40]
+INFO: [Synth 8-638] synthesizing module 'xliq_product_cmpy_v6_0_i0_75a95789294401c6275e6f76e5ded920' [c:/Work/FPGA/RFSoC-MTS/boards/RFSoC4x2/build_mts/mts/mts.gen/sources_1/bd/mts/ipshared/6696/hdl/iq_product_entity_declarations.vhd:60]
+INFO: [Synth 8-3491] module 'iq_product_cmpy_v6_0_i0' declared at 'c:/Work/FPGA/RFSoC-MTS/boards/RFSoC4x2/build_mts/mts/mts.gen/sources_1/bd/mts/ip/mts_IQ_product_0_0/iq_product_cmpy_v6_0_i0/synth/iq_product_cmpy_v6_0_i0.vhd:59' bound to instance 'iq_product_cmpy_v6_0_i0_instance' of component 'iq_product_cmpy_v6_0_i0' [c:/Work/FPGA/RFSoC-MTS/boards/RFSoC4x2/build_mts/mts/mts.gen/sources_1/bd/mts/ipshared/6696/hdl/iq_product_entity_declarations.vhd:84]
+INFO: [Synth 8-638] synthesizing module 'iq_product_cmpy_v6_0_i0' [c:/Work/FPGA/RFSoC-MTS/boards/RFSoC4x2/build_mts/mts/mts.gen/sources_1/bd/mts/ip/mts_IQ_product_0_0/iq_product_cmpy_v6_0_i0/synth/iq_product_cmpy_v6_0_i0.vhd:72]
+	Parameter C_VERBOSITY bound to: 0 - type: integer 
+	Parameter C_XDEVICEFAMILY bound to: zynquplus - type: string 
+	Parameter C_XDEVICE bound to: xczu48dr - type: string 
+	Parameter C_A_WIDTH bound to: 16 - type: integer 
+	Parameter C_B_WIDTH bound to: 16 - type: integer 
+	Parameter C_OUT_WIDTH bound to: 33 - type: integer 
+	Parameter C_LATENCY bound to: 4 - type: integer 
+	Parameter C_MULT_TYPE bound to: 1 - type: integer 
+	Parameter C_OPTIMIZE_GOAL bound to: 1 - type: integer 
+	Parameter HAS_NEGATE bound to: 0 - type: integer 
+	Parameter SINGLE_OUTPUT bound to: 0 - type: integer 
+	Parameter ROUND bound to: 0 - type: integer 
+	Parameter USE_DSP_CASCADES bound to: 1 - type: integer 
+	Parameter C_THROTTLE_SCHEME bound to: 3 - type: integer 
+	Parameter C_HAS_ACLKEN bound to: 1 - type: integer 
+	Parameter C_HAS_ARESETN bound to: 0 - type: integer 
+	Parameter C_HAS_S_AXIS_A_TUSER bound to: 0 - type: integer 
+	Parameter C_HAS_S_AXIS_A_TLAST bound to: 0 - type: integer 
+	Parameter C_HAS_S_AXIS_B_TUSER bound to: 0 - type: integer 
+	Parameter C_HAS_S_AXIS_B_TLAST bound to: 0 - type: integer 
+	Parameter C_HAS_S_AXIS_CTRL_TUSER bound to: 0 - type: integer 
+	Parameter C_HAS_S_AXIS_CTRL_TLAST bound to: 0 - type: integer 
+	Parameter C_TLAST_RESOLUTION bound to: 0 - type: integer 
+	Parameter C_S_AXIS_A_TDATA_WIDTH bound to: 32 - type: integer 
+	Parameter C_S_AXIS_A_TUSER_WIDTH bound to: 1 - type: integer 
+	Parameter C_S_AXIS_B_TDATA_WIDTH bound to: 32 - type: integer 
+	Parameter C_S_AXIS_B_TUSER_WIDTH bound to: 1 - type: integer 
+	Parameter C_S_AXIS_CTRL_TDATA_WIDTH bound to: 8 - type: integer 
+	Parameter C_S_AXIS_CTRL_TUSER_WIDTH bound to: 1 - type: integer 
+	Parameter C_M_AXIS_DOUT_TDATA_WIDTH bound to: 80 - type: integer 
+	Parameter C_M_AXIS_DOUT_TUSER_WIDTH bound to: 1 - type: integer 
+INFO: [Synth 8-3491] module 'cmpy_v6_0_21' declared at 'c:/Work/FPGA/RFSoC-MTS/boards/RFSoC4x2/build_mts/mts/mts.gen/sources_1/bd/mts/ip/mts_IQ_product_0_0/iq_product_cmpy_v6_0_i0/hdl/cmpy_v6_0_vh_rfs.vhd:13916' bound to instance 'U0' of component 'cmpy_v6_0_21' [c:/Work/FPGA/RFSoC-MTS/boards/RFSoC4x2/build_mts/mts/mts.gen/sources_1/bd/mts/ip/mts_IQ_product_0_0/iq_product_cmpy_v6_0_i0/synth/iq_product_cmpy_v6_0_i0.vhd:158]
+INFO: [Synth 8-256] done synthesizing module 'iq_product_cmpy_v6_0_i0' (0#1) [c:/Work/FPGA/RFSoC-MTS/boards/RFSoC4x2/build_mts/mts/mts.gen/sources_1/bd/mts/ip/mts_IQ_product_0_0/iq_product_cmpy_v6_0_i0/synth/iq_product_cmpy_v6_0_i0.vhd:72]
+INFO: [Synth 8-256] done synthesizing module 'xliq_product_cmpy_v6_0_i0_75a95789294401c6275e6f76e5ded920' (0#1) [c:/Work/FPGA/RFSoC-MTS/boards/RFSoC4x2/build_mts/mts/mts.gen/sources_1/bd/mts/ipshared/6696/hdl/iq_product_entity_declarations.vhd:60]
+INFO: [Synth 8-256] done synthesizing module 'iq_product_struct' (0#1) [c:/Work/FPGA/RFSoC-MTS/boards/RFSoC4x2/build_mts/mts/mts.gen/sources_1/bd/mts/ipshared/6696/hdl/iq_product.vhd:40]
+INFO: [Synth 8-256] done synthesizing module 'iq_product' (0#1) [c:/Work/FPGA/RFSoC-MTS/boards/RFSoC4x2/build_mts/mts/mts.gen/sources_1/bd/mts/ipshared/6696/hdl/iq_product.vhd:280]
+INFO: [Synth 8-256] done synthesizing module 'mts_IQ_product_0_0' (0#1) [c:/Work/FPGA/RFSoC-MTS/boards/RFSoC4x2/build_mts/mts/mts.gen/sources_1/bd/mts/ip/mts_IQ_product_0_0/synth/mts_IQ_product_0_0.vhd:93]
+WARNING: [Synth 8-6014] Unused sequential element clk_num_reg was removed.  [c:/Work/FPGA/RFSoC-MTS/boards/RFSoC4x2/build_mts/mts/mts.gen/sources_1/bd/mts/ipshared/6696/hdl/xlclockdriver_rd.vhd:212]
+WARNING: [Synth 8-7129] Port CLK in module cmpy_v6_0_21_delay_line__parameterized2 is either unconnected or has no load
+WARNING: [Synth 8-7129] Port CE in module cmpy_v6_0_21_delay_line__parameterized2 is either unconnected or has no load
+WARNING: [Synth 8-7129] Port SCLR in module cmpy_v6_0_21_delay_line__parameterized2 is either unconnected or has no load
+WARNING: [Synth 8-7129] Port CLK in module cmpy_v6_0_21_delay_line__parameterized1 is either unconnected or has no load
+WARNING: [Synth 8-7129] Port CE in module cmpy_v6_0_21_delay_line__parameterized1 is either unconnected or has no load
+WARNING: [Synth 8-7129] Port SCLR in module cmpy_v6_0_21_delay_line__parameterized1 is either unconnected or has no load
+WARNING: [Synth 8-7129] Port CLK in module cmpy_v6_0_21_delay_line__parameterized0 is either unconnected or has no load
+WARNING: [Synth 8-7129] Port CE in module cmpy_v6_0_21_delay_line__parameterized0 is either unconnected or has no load
+WARNING: [Synth 8-7129] Port SCLR in module cmpy_v6_0_21_delay_line__parameterized0 is either unconnected or has no load
+WARNING: [Synth 8-7129] Port ROUND_CY in module cmpy_4_dsp48_mult is either unconnected or has no load
+WARNING: [Synth 8-7129] Port NEGATE_R in module cmpy_4_dsp48_mult is either unconnected or has no load
+WARNING: [Synth 8-7129] Port NEGATE_I in module cmpy_4_dsp48_mult is either unconnected or has no load
+WARNING: [Synth 8-7129] Port SO_START in module cmpy_4_dsp48 is either unconnected or has no load
+WARNING: [Synth 8-7129] Port SCLR in module cmpy_v6_0_21_synth is either unconnected or has no load
+WARNING: [Synth 8-7129] Port ROUND_CY in module cmpy_v6_0_21_synth is either unconnected or has no load
+WARNING: [Synth 8-7129] Port SCLR in module cmpy_v6_0_21_delay_line is either unconnected or has no load
+WARNING: [Synth 8-7129] Port aresetn in module cmpy_v6_0_21_viv is either unconnected or has no load
+WARNING: [Synth 8-7129] Port s_axis_a_tuser[0] in module cmpy_v6_0_21_viv is either unconnected or has no load
+WARNING: [Synth 8-7129] Port s_axis_a_tlast in module cmpy_v6_0_21_viv is either unconnected or has no load
+WARNING: [Synth 8-7129] Port s_axis_b_tuser[0] in module cmpy_v6_0_21_viv is either unconnected or has no load
+WARNING: [Synth 8-7129] Port s_axis_b_tlast in module cmpy_v6_0_21_viv is either unconnected or has no load
+WARNING: [Synth 8-7129] Port s_axis_ctrl_tvalid in module cmpy_v6_0_21_viv is either unconnected or has no load
+WARNING: [Synth 8-7129] Port s_axis_ctrl_tuser[0] in module cmpy_v6_0_21_viv is either unconnected or has no load
+WARNING: [Synth 8-7129] Port s_axis_ctrl_tlast in module cmpy_v6_0_21_viv is either unconnected or has no load
+WARNING: [Synth 8-7129] Port s_axis_ctrl_tdata[7] in module cmpy_v6_0_21_viv is either unconnected or has no load
+WARNING: [Synth 8-7129] Port s_axis_ctrl_tdata[6] in module cmpy_v6_0_21_viv is either unconnected or has no load
+WARNING: [Synth 8-7129] Port s_axis_ctrl_tdata[5] in module cmpy_v6_0_21_viv is either unconnected or has no load
+WARNING: [Synth 8-7129] Port s_axis_ctrl_tdata[4] in module cmpy_v6_0_21_viv is either unconnected or has no load
+WARNING: [Synth 8-7129] Port s_axis_ctrl_tdata[3] in module cmpy_v6_0_21_viv is either unconnected or has no load
+WARNING: [Synth 8-7129] Port s_axis_ctrl_tdata[2] in module cmpy_v6_0_21_viv is either unconnected or has no load
+WARNING: [Synth 8-7129] Port s_axis_ctrl_tdata[1] in module cmpy_v6_0_21_viv is either unconnected or has no load
+WARNING: [Synth 8-7129] Port s_axis_ctrl_tdata[0] in module cmpy_v6_0_21_viv is either unconnected or has no load
+WARNING: [Synth 8-7129] Port m_axis_dout_tready in module cmpy_v6_0_21_viv is either unconnected or has no load
+---------------------------------------------------------------------------------
+Finished RTL Elaboration : Time (s): cpu = 00:00:07 ; elapsed = 00:00:09 . Memory (MB): peak = 2785.887 ; gain = 505.000
+---------------------------------------------------------------------------------
+---------------------------------------------------------------------------------
+Start Handling Custom Attributes
+---------------------------------------------------------------------------------
+---------------------------------------------------------------------------------
+Finished Handling Custom Attributes : Time (s): cpu = 00:00:07 ; elapsed = 00:00:09 . Memory (MB): peak = 2803.797 ; gain = 522.910
+---------------------------------------------------------------------------------
+---------------------------------------------------------------------------------
+Finished RTL Optimization Phase 1 : Time (s): cpu = 00:00:07 ; elapsed = 00:00:09 . Memory (MB): peak = 2803.797 ; gain = 522.910
+---------------------------------------------------------------------------------
+Netlist sorting complete. Time (s): cpu = 00:00:00 ; elapsed = 00:00:00.102 . Memory (MB): peak = 2815.836 ; gain = 0.000
+INFO: [Netlist 29-17] Analyzing 40 Unisim elements for replacement
+INFO: [Netlist 29-28] Unisim Transformation completed in 1 CPU seconds
+INFO: [Project 1-570] Preparing netlist for logic optimization
+
+Processing XDC Constraints
+Initializing timing engine
+Parsing XDC File [c:/Work/FPGA/RFSoC-MTS/boards/RFSoC4x2/build_mts/mts/mts.gen/sources_1/bd/mts/ip/mts_IQ_product_0_0/constrs/iq_product.xdc] for cell 'U0'
+Finished Parsing XDC File [c:/Work/FPGA/RFSoC-MTS/boards/RFSoC4x2/build_mts/mts/mts.gen/sources_1/bd/mts/ip/mts_IQ_product_0_0/constrs/iq_product.xdc] for cell 'U0'
+Parsing XDC File [C:/Work/FPGA/RFSoC-MTS/boards/RFSoC4x2/build_mts/mts/mts.runs/mts_IQ_product_0_0_synth_1/dont_touch.xdc]
+Finished Parsing XDC File [C:/Work/FPGA/RFSoC-MTS/boards/RFSoC4x2/build_mts/mts/mts.runs/mts_IQ_product_0_0_synth_1/dont_touch.xdc]
+Completed Processing XDC Constraints
+
+Netlist sorting complete. Time (s): cpu = 00:00:00 ; elapsed = 00:00:00.001 . Memory (MB): peak = 2935.027 ; gain = 0.000
+INFO: [Project 1-111] Unisim Transformation Summary:
+  A total of 40 instances were transformed.
+  DSP48E2 => DSP48E2 (DSP_ALU, DSP_A_B_DATA, DSP_C_DATA, DSP_MULTIPLIER, DSP_M_DATA, DSP_OUTPUT, DSP_PREADD, DSP_PREADD_DATA): 40 instances
+
+Constraint Validation Runtime : Time (s): cpu = 00:00:02 ; elapsed = 00:00:00.801 . Memory (MB): peak = 2935.031 ; gain = 0.004
+INFO: [Designutils 20-5008] Incremental synthesis strategy off
+INFO: [Synth 8-11241] undeclared symbol 'REGCCE', assumed default net type 'wire' [C:/Xilinx/Vivado/2022.2/data/verilog/src/unimacro/BRAM_SINGLE_MACRO.v:2170]
+---------------------------------------------------------------------------------
+Finished Constraint Validation : Time (s): cpu = 00:00:15 ; elapsed = 00:00:17 . Memory (MB): peak = 2935.031 ; gain = 654.145
+---------------------------------------------------------------------------------
+---------------------------------------------------------------------------------
+Start Loading Part and Timing Information
+---------------------------------------------------------------------------------
+Loading part: xczu48dr-ffvg1517-2-e
+INFO: [Synth 8-6742] Reading net delay rules and data
+---------------------------------------------------------------------------------
+Finished Loading Part and Timing Information : Time (s): cpu = 00:00:15 ; elapsed = 00:00:17 . Memory (MB): peak = 2935.031 ; gain = 654.145
+---------------------------------------------------------------------------------
+---------------------------------------------------------------------------------
+Start Applying 'set_property' XDC Constraints
+---------------------------------------------------------------------------------
+Applied set_property KEEP_HIERARCHY = SOFT for U0. (constraint file  C:/Work/FPGA/RFSoC-MTS/boards/RFSoC4x2/build_mts/mts/mts.runs/mts_IQ_product_0_0_synth_1/dont_touch.xdc, line 12).
+Applied set_property KEEP_HIERARCHY = SOFT for U0/iq_product_struct/product/iq_product_cmpy_v6_0_i0_instance. (constraint file  auto generated constraint).
+Applied set_property KEEP_HIERARCHY = SOFT for U0/iq_product_struct/product1/iq_product_cmpy_v6_0_i0_instance. (constraint file  auto generated constraint).
+Applied set_property KEEP_HIERARCHY = SOFT for U0/iq_product_struct/product2/iq_product_cmpy_v6_0_i0_instance. (constraint file  auto generated constraint).
+Applied set_property KEEP_HIERARCHY = SOFT for U0/iq_product_struct/product3/iq_product_cmpy_v6_0_i0_instance. (constraint file  auto generated constraint).
+Applied set_property KEEP_HIERARCHY = SOFT for U0/iq_product_struct/product4/iq_product_cmpy_v6_0_i0_instance. (constraint file  auto generated constraint).
+Applied set_property KEEP_HIERARCHY = SOFT for U0/iq_product_struct/product5/iq_product_cmpy_v6_0_i0_instance. (constraint file  auto generated constraint).
+Applied set_property KEEP_HIERARCHY = SOFT for U0/iq_product_struct/product6/iq_product_cmpy_v6_0_i0_instance. (constraint file  auto generated constraint).
+Applied set_property KEEP_HIERARCHY = SOFT for U0/iq_product_struct/product7/iq_product_cmpy_v6_0_i0_instance. (constraint file  auto generated constraint).
+Applied set_property KEEP_HIERARCHY = SOFT for U0/iq_product_struct/product8/iq_product_cmpy_v6_0_i0_instance. (constraint file  auto generated constraint).
+Applied set_property KEEP_HIERARCHY = SOFT for U0/iq_product_struct/product9/iq_product_cmpy_v6_0_i0_instance. (constraint file  auto generated constraint).
+---------------------------------------------------------------------------------
+Finished applying 'set_property' XDC Constraints : Time (s): cpu = 00:00:15 ; elapsed = 00:00:17 . Memory (MB): peak = 2935.031 ; gain = 654.145
+---------------------------------------------------------------------------------
+---------------------------------------------------------------------------------
+Finished RTL Optimization Phase 2 : Time (s): cpu = 00:00:15 ; elapsed = 00:00:17 . Memory (MB): peak = 2935.031 ; gain = 654.145
+---------------------------------------------------------------------------------
+---------------------------------------------------------------------------------
+Start RTL Component Statistics 
+---------------------------------------------------------------------------------
+---------------------------------------------------------------------------------
+Finished RTL Component Statistics 
+---------------------------------------------------------------------------------
+---------------------------------------------------------------------------------
+Start Part Resource Summary
+---------------------------------------------------------------------------------
+Part Resources:
+DSPs: 4272 (col length:192)
+BRAMs: 2160 (col length: RAMB18 192 RAMB36 96)
+---------------------------------------------------------------------------------
+Finished Part Resource Summary
+---------------------------------------------------------------------------------
+---------------------------------------------------------------------------------
+Start Cross Boundary and Area Optimization
+---------------------------------------------------------------------------------
+WARNING: [Synth 8-7080] Parallel synthesis criteria is not met
+WARNING: [Synth 8-7129] Port aresetn in module cmpy_v6_0_21_viv is either unconnected or has no load
+WARNING: [Synth 8-7129] Port s_axis_a_tuser[0] in module cmpy_v6_0_21_viv is either unconnected or has no load
+WARNING: [Synth 8-7129] Port s_axis_a_tlast in module cmpy_v6_0_21_viv is either unconnected or has no load
+WARNING: [Synth 8-7129] Port s_axis_b_tuser[0] in module cmpy_v6_0_21_viv is either unconnected or has no load
+WARNING: [Synth 8-7129] Port s_axis_b_tlast in module cmpy_v6_0_21_viv is either unconnected or has no load
+WARNING: [Synth 8-7129] Port s_axis_ctrl_tvalid in module cmpy_v6_0_21_viv is either unconnected or has no load
+WARNING: [Synth 8-7129] Port s_axis_ctrl_tuser[0] in module cmpy_v6_0_21_viv is either unconnected or has no load
+WARNING: [Synth 8-7129] Port s_axis_ctrl_tlast in module cmpy_v6_0_21_viv is either unconnected or has no load
+WARNING: [Synth 8-7129] Port s_axis_ctrl_tdata[7] in module cmpy_v6_0_21_viv is either unconnected or has no load
+WARNING: [Synth 8-7129] Port s_axis_ctrl_tdata[6] in module cmpy_v6_0_21_viv is either unconnected or has no load
+WARNING: [Synth 8-7129] Port s_axis_ctrl_tdata[5] in module cmpy_v6_0_21_viv is either unconnected or has no load
+WARNING: [Synth 8-7129] Port s_axis_ctrl_tdata[4] in module cmpy_v6_0_21_viv is either unconnected or has no load
+WARNING: [Synth 8-7129] Port s_axis_ctrl_tdata[3] in module cmpy_v6_0_21_viv is either unconnected or has no load
+WARNING: [Synth 8-7129] Port s_axis_ctrl_tdata[2] in module cmpy_v6_0_21_viv is either unconnected or has no load
+WARNING: [Synth 8-7129] Port s_axis_ctrl_tdata[1] in module cmpy_v6_0_21_viv is either unconnected or has no load
+WARNING: [Synth 8-7129] Port s_axis_ctrl_tdata[0] in module cmpy_v6_0_21_viv is either unconnected or has no load
+WARNING: [Synth 8-7129] Port m_axis_dout_tready in module cmpy_v6_0_21_viv is either unconnected or has no load
+WARNING: [Synth 8-3332] Sequential element (iq_product_default_clock_driver/clockdriver/clr_reg/latency_gt_0.fd_array[1].reg_comp/fd_prim_array[0].bit_is_0.fdre_comp) is unused and will be removed from module iq_product.
+---------------------------------------------------------------------------------
+Finished Cross Boundary and Area Optimization : Time (s): cpu = 00:00:16 ; elapsed = 00:00:19 . Memory (MB): peak = 2935.031 ; gain = 654.145
+---------------------------------------------------------------------------------
+---------------------------------------------------------------------------------
+Start Applying XDC Timing Constraints
+---------------------------------------------------------------------------------
+---------------------------------------------------------------------------------
+Finished Applying XDC Timing Constraints : Time (s): cpu = 00:00:24 ; elapsed = 00:00:27 . Memory (MB): peak = 3215.000 ; gain = 934.113
+---------------------------------------------------------------------------------
+---------------------------------------------------------------------------------
+Start Timing Optimization
+---------------------------------------------------------------------------------
+---------------------------------------------------------------------------------
+Finished Timing Optimization : Time (s): cpu = 00:00:24 ; elapsed = 00:00:28 . Memory (MB): peak = 3224.566 ; gain = 943.680
+---------------------------------------------------------------------------------
+---------------------------------------------------------------------------------
+Start Technology Mapping
+---------------------------------------------------------------------------------
+---------------------------------------------------------------------------------
+Finished Technology Mapping : Time (s): cpu = 00:00:24 ; elapsed = 00:00:28 . Memory (MB): peak = 3242.676 ; gain = 961.789
+---------------------------------------------------------------------------------
+---------------------------------------------------------------------------------
+Start IO Insertion
+---------------------------------------------------------------------------------
+---------------------------------------------------------------------------------
+Start Flattening Before IO Insertion
+---------------------------------------------------------------------------------
+---------------------------------------------------------------------------------
+Finished Flattening Before IO Insertion
+---------------------------------------------------------------------------------
+---------------------------------------------------------------------------------
+Start Final Netlist Cleanup
+---------------------------------------------------------------------------------
+---------------------------------------------------------------------------------
+Finished Final Netlist Cleanup
+---------------------------------------------------------------------------------
+---------------------------------------------------------------------------------
+Finished IO Insertion : Time (s): cpu = 00:00:27 ; elapsed = 00:00:31 . Memory (MB): peak = 3249.203 ; gain = 968.316
+---------------------------------------------------------------------------------
+---------------------------------------------------------------------------------
+Start Renaming Generated Instances
+---------------------------------------------------------------------------------
+---------------------------------------------------------------------------------
+Finished Renaming Generated Instances : Time (s): cpu = 00:00:27 ; elapsed = 00:00:31 . Memory (MB): peak = 3249.203 ; gain = 968.316
+---------------------------------------------------------------------------------
+---------------------------------------------------------------------------------
+Start Rebuilding User Hierarchy
+---------------------------------------------------------------------------------
+---------------------------------------------------------------------------------
+Finished Rebuilding User Hierarchy : Time (s): cpu = 00:00:27 ; elapsed = 00:00:31 . Memory (MB): peak = 3249.203 ; gain = 968.316
+---------------------------------------------------------------------------------
+---------------------------------------------------------------------------------
+Start Renaming Generated Ports
+---------------------------------------------------------------------------------
+---------------------------------------------------------------------------------
+Finished Renaming Generated Ports : Time (s): cpu = 00:00:27 ; elapsed = 00:00:31 . Memory (MB): peak = 3249.203 ; gain = 968.316
+---------------------------------------------------------------------------------
+---------------------------------------------------------------------------------
+Start Handling Custom Attributes
+---------------------------------------------------------------------------------
+---------------------------------------------------------------------------------
+Finished Handling Custom Attributes : Time (s): cpu = 00:00:27 ; elapsed = 00:00:31 . Memory (MB): peak = 3249.203 ; gain = 968.316
+---------------------------------------------------------------------------------
+---------------------------------------------------------------------------------
+Start Renaming Generated Nets
+---------------------------------------------------------------------------------
+---------------------------------------------------------------------------------
+Finished Renaming Generated Nets : Time (s): cpu = 00:00:27 ; elapsed = 00:00:31 . Memory (MB): peak = 3249.203 ; gain = 968.316
+---------------------------------------------------------------------------------
+---------------------------------------------------------------------------------
+Start Writing Synthesis Report
+---------------------------------------------------------------------------------
+
+DSP Final Report (the ' indicates corresponding REG is set)
++---------------------+-------------------------+--------+--------+--------+--------+--------+------+------+------+------+-------+------+------+
+|Module Name          | DSP Mapping             | A Size | B Size | C Size | D Size | P Size | AREG | BREG | CREG | DREG | ADREG | MREG | PREG | 
++---------------------+-------------------------+--------+--------+--------+--------+--------+------+------+------+------+-------+------+------+
+|cmpy_4_dsp48_mult_35 | ((A'*B')')'             | 27     | 18     | -      | -      | 0      | 1    | 1    | -    | -    | -     | 1    | 1    | 
+|cmpy_4_dsp48_mult_35 | (not(PCIN+(A''*B'')'))' | 27     | 18     | -      | -      | 46     | 2    | 2    | -    | -    | -     | 1    | 1    | 
+|cmpy_4_dsp48_mult_35 | ((A'*B')')'             | 27     | 18     | -      | -      | 0      | 1    | 1    | -    | -    | -     | 1    | 1    | 
+|cmpy_4_dsp48_mult_35 | (PCIN+(A''*B'')')'      | 27     | 18     | -      | -      | 46     | 2    | 2    | -    | -    | -     | 1    | 1    | 
+|cmpy_4_dsp48_mult_31 | ((A'*B')')'             | 27     | 18     | -      | -      | 0      | 1    | 1    | -    | -    | -     | 1    | 1    | 
+|cmpy_4_dsp48_mult_31 | (not(PCIN+(A''*B'')'))' | 27     | 18     | -      | -      | 46     | 2    | 2    | -    | -    | -     | 1    | 1    | 
+|cmpy_4_dsp48_mult_31 | ((A'*B')')'             | 27     | 18     | -      | -      | 0      | 1    | 1    | -    | -    | -     | 1    | 1    | 
+|cmpy_4_dsp48_mult_31 | (PCIN+(A''*B'')')'      | 27     | 18     | -      | -      | 46     | 2    | 2    | -    | -    | -     | 1    | 1    | 
+|cmpy_4_dsp48_mult_27 | ((A'*B')')'             | 27     | 18     | -      | -      | 0      | 1    | 1    | -    | -    | -     | 1    | 1    | 
+|cmpy_4_dsp48_mult_27 | (not(PCIN+(A''*B'')'))' | 27     | 18     | -      | -      | 46     | 2    | 2    | -    | -    | -     | 1    | 1    | 
+|cmpy_4_dsp48_mult_27 | ((A'*B')')'             | 27     | 18     | -      | -      | 0      | 1    | 1    | -    | -    | -     | 1    | 1    | 
+|cmpy_4_dsp48_mult_27 | (PCIN+(A''*B'')')'      | 27     | 18     | -      | -      | 46     | 2    | 2    | -    | -    | -     | 1    | 1    | 
+|cmpy_4_dsp48_mult_23 | ((A'*B')')'             | 27     | 18     | -      | -      | 0      | 1    | 1    | -    | -    | -     | 1    | 1    | 
+|cmpy_4_dsp48_mult_23 | (not(PCIN+(A''*B'')'))' | 27     | 18     | -      | -      | 46     | 2    | 2    | -    | -    | -     | 1    | 1    | 
+|cmpy_4_dsp48_mult_23 | ((A'*B')')'             | 27     | 18     | -      | -      | 0      | 1    | 1    | -    | -    | -     | 1    | 1    | 
+|cmpy_4_dsp48_mult_23 | (PCIN+(A''*B'')')'      | 27     | 18     | -      | -      | 46     | 2    | 2    | -    | -    | -     | 1    | 1    | 
+|cmpy_4_dsp48_mult_19 | ((A'*B')')'             | 27     | 18     | -      | -      | 0      | 1    | 1    | -    | -    | -     | 1    | 1    | 
+|cmpy_4_dsp48_mult_19 | (not(PCIN+(A''*B'')'))' | 27     | 18     | -      | -      | 46     | 2    | 2    | -    | -    | -     | 1    | 1    | 
+|cmpy_4_dsp48_mult_19 | ((A'*B')')'             | 27     | 18     | -      | -      | 0      | 1    | 1    | -    | -    | -     | 1    | 1    | 
+|cmpy_4_dsp48_mult_19 | (PCIN+(A''*B'')')'      | 27     | 18     | -      | -      | 46     | 2    | 2    | -    | -    | -     | 1    | 1    | 
+|cmpy_4_dsp48_mult_15 | ((A'*B')')'             | 27     | 18     | -      | -      | 0      | 1    | 1    | -    | -    | -     | 1    | 1    | 
+|cmpy_4_dsp48_mult_15 | (not(PCIN+(A''*B'')'))' | 27     | 18     | -      | -      | 46     | 2    | 2    | -    | -    | -     | 1    | 1    | 
+|cmpy_4_dsp48_mult_15 | ((A'*B')')'             | 27     | 18     | -      | -      | 0      | 1    | 1    | -    | -    | -     | 1    | 1    | 
+|cmpy_4_dsp48_mult_15 | (PCIN+(A''*B'')')'      | 27     | 18     | -      | -      | 46     | 2    | 2    | -    | -    | -     | 1    | 1    | 
+|cmpy_4_dsp48_mult_11 | ((A'*B')')'             | 27     | 18     | -      | -      | 0      | 1    | 1    | -    | -    | -     | 1    | 1    | 
+|cmpy_4_dsp48_mult_11 | (not(PCIN+(A''*B'')'))' | 27     | 18     | -      | -      | 46     | 2    | 2    | -    | -    | -     | 1    | 1    | 
+|cmpy_4_dsp48_mult_11 | ((A'*B')')'             | 27     | 18     | -      | -      | 0      | 1    | 1    | -    | -    | -     | 1    | 1    | 
+|cmpy_4_dsp48_mult_11 | (PCIN+(A''*B'')')'      | 27     | 18     | -      | -      | 46     | 2    | 2    | -    | -    | -     | 1    | 1    | 
+|cmpy_4_dsp48_mult_7  | ((A'*B')')'             | 27     | 18     | -      | -      | 0      | 1    | 1    | -    | -    | -     | 1    | 1    | 
+|cmpy_4_dsp48_mult_7  | (not(PCIN+(A''*B'')'))' | 27     | 18     | -      | -      | 46     | 2    | 2    | -    | -    | -     | 1    | 1    | 
+|cmpy_4_dsp48_mult_7  | ((A'*B')')'             | 27     | 18     | -      | -      | 0      | 1    | 1    | -    | -    | -     | 1    | 1    | 
+|cmpy_4_dsp48_mult_7  | (PCIN+(A''*B'')')'      | 27     | 18     | -      | -      | 46     | 2    | 2    | -    | -    | -     | 1    | 1    | 
+|cmpy_4_dsp48_mult_3  | ((A'*B')')'             | 27     | 18     | -      | -      | 0      | 1    | 1    | -    | -    | -     | 1    | 1    | 
+|cmpy_4_dsp48_mult_3  | (not(PCIN+(A''*B'')'))' | 27     | 18     | -      | -      | 46     | 2    | 2    | -    | -    | -     | 1    | 1    | 
+|cmpy_4_dsp48_mult_3  | ((A'*B')')'             | 27     | 18     | -      | -      | 0      | 1    | 1    | -    | -    | -     | 1    | 1    | 
+|cmpy_4_dsp48_mult_3  | (PCIN+(A''*B'')')'      | 27     | 18     | -      | -      | 46     | 2    | 2    | -    | -    | -     | 1    | 1    | 
+|cmpy_4_dsp48_mult    | ((A'*B')')'             | 27     | 18     | -      | -      | 0      | 1    | 1    | -    | -    | -     | 1    | 1    | 
+|cmpy_4_dsp48_mult    | (not(PCIN+(A''*B'')'))' | 27     | 18     | -      | -      | 46     | 2    | 2    | -    | -    | -     | 1    | 1    | 
+|cmpy_4_dsp48_mult    | ((A'*B')')'             | 27     | 18     | -      | -      | 0      | 1    | 1    | -    | -    | -     | 1    | 1    | 
+|cmpy_4_dsp48_mult    | (PCIN+(A''*B'')')'      | 27     | 18     | -      | -      | 46     | 2    | 2    | -    | -    | -     | 1    | 1    | 
++---------------------+-------------------------+--------+--------+--------+--------+--------+------+------+------+------+-------+------+------+
+
+
+Report BlackBoxes: 
++-+--------------+----------+
+| |BlackBox name |Instances |
++-+--------------+----------+
++-+--------------+----------+
+
+Report Cell Usage: 
++------+----------------+------+
+|      |Cell            |Count |
++------+----------------+------+
+|1     |DSP_ALU         |    40|
+|3     |DSP_A_B_DATA    |    40|
+|5     |DSP_C_DATA      |    40|
+|6     |DSP_MULTIPLIER  |    40|
+|7     |DSP_M_DATA      |    40|
+|8     |DSP_OUTPUT      |    40|
+|9     |DSP_PREADD      |    40|
+|10    |DSP_PREADD_DATA |    40|
+|11    |LUT2            |    10|
+|12    |FDRE            |    10|
++------+----------------+------+
+---------------------------------------------------------------------------------
+Finished Writing Synthesis Report : Time (s): cpu = 00:00:27 ; elapsed = 00:00:31 . Memory (MB): peak = 3249.203 ; gain = 968.316
+---------------------------------------------------------------------------------
+Synthesis finished with 0 errors, 0 critical warnings and 19 warnings.
+Synthesis Optimization Runtime : Time (s): cpu = 00:00:16 ; elapsed = 00:00:28 . Memory (MB): peak = 3249.203 ; gain = 837.082
+Synthesis Optimization Complete : Time (s): cpu = 00:00:27 ; elapsed = 00:00:31 . Memory (MB): peak = 3249.203 ; gain = 968.316
+INFO: [Project 1-571] Translating synthesized netlist
+Netlist sorting complete. Time (s): cpu = 00:00:00 ; elapsed = 00:00:00.075 . Memory (MB): peak = 3249.203 ; gain = 0.000
+INFO: [Netlist 29-17] Analyzing 40 Unisim elements for replacement
+INFO: [Netlist 29-28] Unisim Transformation completed in 0 CPU seconds
+INFO: [Project 1-570] Preparing netlist for logic optimization
+INFO: [Opt 31-138] Pushed 0 inverter(s) to 0 load pin(s).
+Netlist sorting complete. Time (s): cpu = 00:00:00 ; elapsed = 00:00:00 . Memory (MB): peak = 3317.449 ; gain = 0.000
+INFO: [Project 1-111] Unisim Transformation Summary:
+  A total of 40 instances were transformed.
+  DSP48E2 => DSP48E2 (DSP_ALU, DSP_A_B_DATA, DSP_C_DATA, DSP_MULTIPLIER, DSP_M_DATA, DSP_OUTPUT, DSP_PREADD, DSP_PREADD_DATA): 40 instances
+
+Synth Design complete, checksum: cb2b51f9
+INFO: [Common 17-83] Releasing license: Synthesis
+48 Infos, 54 Warnings, 0 Critical Warnings and 0 Errors encountered.
+synth_design completed successfully
+synth_design: Time (s): cpu = 00:00:34 ; elapsed = 00:00:40 . Memory (MB): peak = 3317.449 ; gain = 2096.902
+INFO: [Common 17-1381] The checkpoint 'C:/Work/FPGA/RFSoC-MTS/boards/RFSoC4x2/build_mts/mts/mts.runs/mts_IQ_product_0_0_synth_1/mts_IQ_product_0_0.dcp' has been generated.
+INFO: [Coretcl 2-1648] Added synthesis output to IP cache for IP mts_IQ_product_0_0, cache-ID = a5d1d4db228e327b
+INFO: [Coretcl 2-1174] Renamed 82 cell refs.
+INFO: [Common 17-1381] The checkpoint 'C:/Work/FPGA/RFSoC-MTS/boards/RFSoC4x2/build_mts/mts/mts.runs/mts_IQ_product_0_0_synth_1/mts_IQ_product_0_0.dcp' has been generated.
+INFO: [runtcl-4] Executing : report_utilization -file mts_IQ_product_0_0_utilization_synth.rpt -pb mts_IQ_product_0_0_utilization_synth.pb
+INFO: [Common 17-206] Exiting Vivado at Sun Jun 25 16:19:43 2023...

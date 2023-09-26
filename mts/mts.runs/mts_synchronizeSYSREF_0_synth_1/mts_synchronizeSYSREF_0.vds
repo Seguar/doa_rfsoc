@@ -1,0 +1,260 @@
+#-----------------------------------------------------------
+# Vivado v2022.2.2 (64-bit)
+# SW Build 3788238 on Tue Feb 21 20:00:34 MST 2023
+# IP Build 3783773 on Tue Feb 21 23:41:56 MST 2023
+# Start of session at: Mon Jun 19 19:30:40 2023
+# Process ID: 14072
+# Current directory: C:/Work/FPGA/RFSoC-MTS/boards/RFSoC4x2/build_mts/mts/mts.runs/mts_synchronizeSYSREF_0_synth_1
+# Command line: vivado.exe -log mts_synchronizeSYSREF_0.vds -product Vivado -mode batch -messageDb vivado.pb -notrace -source mts_synchronizeSYSREF_0.tcl
+# Log file: C:/Work/FPGA/RFSoC-MTS/boards/RFSoC4x2/build_mts/mts/mts.runs/mts_synchronizeSYSREF_0_synth_1/mts_synchronizeSYSREF_0.vds
+# Journal file: C:/Work/FPGA/RFSoC-MTS/boards/RFSoC4x2/build_mts/mts/mts.runs/mts_synchronizeSYSREF_0_synth_1\vivado.jou
+# Running On: Sega, OS: Windows, CPU Frequency: 2695 MHz, CPU Physical cores: 16, Host memory: 29793 MB
+#-----------------------------------------------------------
+source mts_synchronizeSYSREF_0.tcl -notrace
+create_project: Time (s): cpu = 00:00:08 ; elapsed = 00:00:11 . Memory (MB): peak = 1150.281 ; gain = 123.121
+INFO: [IP_Flow 19-234] Refreshing IP repositories
+WARNING: [IP_Flow 19-2248] Failed to load user IP repository 'c:/Work/FPGA/RFSoC-MTS/ip'; Can't find the specified path.
+If this directory should no longer be in your list of user repositories, go to the IP Settings dialog and remove it.
+INFO: [IP_Flow 19-2313] Loaded Vivado IP repository 'C:/Xilinx/Vivado/2022.2/data/ip'.
+INFO: [IP_Flow 19-6924] IPCACHE: Running cache check for IP inst: mts_synchronizeSYSREF_0
+Command: synth_design -top mts_synchronizeSYSREF_0 -part xczu48dr-ffvg1517-2-e -incremental_mode off -mode out_of_context
+Starting synth_design
+Attempting to get a license for feature 'Synthesis' and/or device 'xczu48dr'
+INFO: [Common 17-349] Got license for feature 'Synthesis' and/or device 'xczu48dr'
+INFO: [Device 21-403] Loading part xczu48dr-ffvg1517-2-e
+INFO: [Synth 8-7079] Multithreading enabled for synth_design using a maximum of 2 processes.
+INFO: [Synth 8-7078] Launching helper process for spawning children vivado processes
+INFO: [Synth 8-7075] Helper process launched with PID 18904
+INFO: [Synth 8-11241] undeclared symbol 'REGCCE', assumed default net type 'wire' [C:/Xilinx/Vivado/2022.2/data/verilog/src/unimacro/BRAM_SINGLE_MACRO.v:2170]
+---------------------------------------------------------------------------------
+Starting RTL Elaboration : Time (s): cpu = 00:00:07 ; elapsed = 00:00:29 . Memory (MB): peak = 2646.605 ; gain = 363.238
+---------------------------------------------------------------------------------
+INFO: [Synth 8-6157] synthesizing module 'mts_synchronizeSYSREF_0' [c:/Work/FPGA/RFSoC-MTS/boards/RFSoC4x2/build_mts/mts/mts.gen/sources_1/bd/mts/ip/mts_synchronizeSYSREF_0/synth/mts_synchronizeSYSREF_0.v:53]
+INFO: [Synth 8-6157] synthesizing module 'xpm_cdc_gen_v1_0_2' [c:/Work/FPGA/RFSoC-MTS/boards/RFSoC4x2/build_mts/mts/mts.gen/sources_1/bd/mts/ipshared/c636/hdl/xpm_cdc_gen_v1_0_vl_rfs.v:52]
+INFO: [Synth 8-6157] synthesizing module 'xpm_cdc_single' [C:/Xilinx/Vivado/2022.2/data/ip/xpm/xpm_cdc/hdl/xpm_cdc.sv:152]
+INFO: [Synth 8-6155] done synthesizing module 'xpm_cdc_single' (0#1) [C:/Xilinx/Vivado/2022.2/data/ip/xpm/xpm_cdc/hdl/xpm_cdc.sv:152]
+INFO: [Synth 8-6155] done synthesizing module 'xpm_cdc_gen_v1_0_2' (0#1) [c:/Work/FPGA/RFSoC-MTS/boards/RFSoC4x2/build_mts/mts/mts.gen/sources_1/bd/mts/ipshared/c636/hdl/xpm_cdc_gen_v1_0_vl_rfs.v:52]
+INFO: [Synth 8-6155] done synthesizing module 'mts_synchronizeSYSREF_0' (0#1) [c:/Work/FPGA/RFSoC-MTS/boards/RFSoC4x2/build_mts/mts/mts.gen/sources_1/bd/mts/ip/mts_synchronizeSYSREF_0/synth/mts_synchronizeSYSREF_0.v:53]
+WARNING: [Synth 8-3848] Net dest_out_bin in module/entity xpm_cdc_gen_v1_0_2 does not have driver. [c:/Work/FPGA/RFSoC-MTS/boards/RFSoC4x2/build_mts/mts/mts.gen/sources_1/bd/mts/ipshared/c636/hdl/xpm_cdc_gen_v1_0_vl_rfs.v:85]
+WARNING: [Synth 8-3848] Net src_rcv in module/entity xpm_cdc_gen_v1_0_2 does not have driver. [c:/Work/FPGA/RFSoC-MTS/boards/RFSoC4x2/build_mts/mts/mts.gen/sources_1/bd/mts/ipshared/c636/hdl/xpm_cdc_gen_v1_0_vl_rfs.v:86]
+WARNING: [Synth 8-3848] Net dest_req in module/entity xpm_cdc_gen_v1_0_2 does not have driver. [c:/Work/FPGA/RFSoC-MTS/boards/RFSoC4x2/build_mts/mts/mts.gen/sources_1/bd/mts/ipshared/c636/hdl/xpm_cdc_gen_v1_0_vl_rfs.v:87]
+WARNING: [Synth 8-3848] Net dest_pulse in module/entity xpm_cdc_gen_v1_0_2 does not have driver. [c:/Work/FPGA/RFSoC-MTS/boards/RFSoC4x2/build_mts/mts/mts.gen/sources_1/bd/mts/ipshared/c636/hdl/xpm_cdc_gen_v1_0_vl_rfs.v:88]
+WARNING: [Synth 8-3848] Net dest_rst_out in module/entity xpm_cdc_gen_v1_0_2 does not have driver. [c:/Work/FPGA/RFSoC-MTS/boards/RFSoC4x2/build_mts/mts/mts.gen/sources_1/bd/mts/ipshared/c636/hdl/xpm_cdc_gen_v1_0_vl_rfs.v:89]
+WARNING: [Synth 8-3848] Net dest_arst in module/entity xpm_cdc_gen_v1_0_2 does not have driver. [c:/Work/FPGA/RFSoC-MTS/boards/RFSoC4x2/build_mts/mts/mts.gen/sources_1/bd/mts/ipshared/c636/hdl/xpm_cdc_gen_v1_0_vl_rfs.v:90]
+WARNING: [Synth 8-7129] Port dest_out_bin[0] in module xpm_cdc_gen_v1_0_2 is either unconnected or has no load
+WARNING: [Synth 8-7129] Port src_rcv in module xpm_cdc_gen_v1_0_2 is either unconnected or has no load
+WARNING: [Synth 8-7129] Port dest_req in module xpm_cdc_gen_v1_0_2 is either unconnected or has no load
+WARNING: [Synth 8-7129] Port dest_pulse in module xpm_cdc_gen_v1_0_2 is either unconnected or has no load
+WARNING: [Synth 8-7129] Port dest_rst_out in module xpm_cdc_gen_v1_0_2 is either unconnected or has no load
+WARNING: [Synth 8-7129] Port dest_arst in module xpm_cdc_gen_v1_0_2 is either unconnected or has no load
+WARNING: [Synth 8-7129] Port src_in_bin[0] in module xpm_cdc_gen_v1_0_2 is either unconnected or has no load
+WARNING: [Synth 8-7129] Port src_send in module xpm_cdc_gen_v1_0_2 is either unconnected or has no load
+WARNING: [Synth 8-7129] Port dest_ack in module xpm_cdc_gen_v1_0_2 is either unconnected or has no load
+WARNING: [Synth 8-7129] Port src_pulse in module xpm_cdc_gen_v1_0_2 is either unconnected or has no load
+WARNING: [Synth 8-7129] Port src_rst in module xpm_cdc_gen_v1_0_2 is either unconnected or has no load
+WARNING: [Synth 8-7129] Port dest_rst_in in module xpm_cdc_gen_v1_0_2 is either unconnected or has no load
+WARNING: [Synth 8-7129] Port src_arst in module xpm_cdc_gen_v1_0_2 is either unconnected or has no load
+---------------------------------------------------------------------------------
+Finished RTL Elaboration : Time (s): cpu = 00:00:09 ; elapsed = 00:00:32 . Memory (MB): peak = 2726.152 ; gain = 442.785
+---------------------------------------------------------------------------------
+---------------------------------------------------------------------------------
+Start Handling Custom Attributes
+---------------------------------------------------------------------------------
+---------------------------------------------------------------------------------
+Finished Handling Custom Attributes : Time (s): cpu = 00:00:10 ; elapsed = 00:00:32 . Memory (MB): peak = 2744.047 ; gain = 460.680
+---------------------------------------------------------------------------------
+---------------------------------------------------------------------------------
+Finished RTL Optimization Phase 1 : Time (s): cpu = 00:00:10 ; elapsed = 00:00:32 . Memory (MB): peak = 2744.047 ; gain = 460.680
+---------------------------------------------------------------------------------
+Netlist sorting complete. Time (s): cpu = 00:00:00 ; elapsed = 00:00:00.001 . Memory (MB): peak = 2744.047 ; gain = 0.000
+INFO: [Project 1-570] Preparing netlist for logic optimization
+
+Processing XDC Constraints
+Initializing timing engine
+Parsing XDC File [c:/Work/FPGA/RFSoC-MTS/boards/RFSoC4x2/build_mts/mts/mts.gen/sources_1/bd/mts/ip/mts_synchronizeSYSREF_0/synth/mts_synchronizeSYSREF_0_ooc.xdc] for cell 'inst'
+Finished Parsing XDC File [c:/Work/FPGA/RFSoC-MTS/boards/RFSoC4x2/build_mts/mts/mts.gen/sources_1/bd/mts/ip/mts_synchronizeSYSREF_0/synth/mts_synchronizeSYSREF_0_ooc.xdc] for cell 'inst'
+Parsing XDC File [c:/Work/FPGA/RFSoC-MTS/boards/RFSoC4x2/build_mts/mts/mts.gen/sources_1/bd/mts/ip/mts_synchronizeSYSREF_0/mts_synchronizeSYSREF_0_ooc.xdc] for cell 'inst'
+create_clock: Time (s): cpu = 00:00:11 ; elapsed = 00:00:12 . Memory (MB): peak = 2795.500 ; gain = 0.047
+Finished Parsing XDC File [c:/Work/FPGA/RFSoC-MTS/boards/RFSoC4x2/build_mts/mts/mts.gen/sources_1/bd/mts/ip/mts_synchronizeSYSREF_0/mts_synchronizeSYSREF_0_ooc.xdc] for cell 'inst'
+Parsing XDC File [C:/Work/FPGA/RFSoC-MTS/boards/RFSoC4x2/build_mts/mts/mts.runs/mts_synchronizeSYSREF_0_synth_1/dont_touch.xdc]
+Finished Parsing XDC File [C:/Work/FPGA/RFSoC-MTS/boards/RFSoC4x2/build_mts/mts/mts.runs/mts_synchronizeSYSREF_0_synth_1/dont_touch.xdc]
+INFO: [Project 1-236] Implementation specific constraints were found while reading constraint file [C:/Xilinx/Vivado/2022.2/data/ip/xpm/xpm_cdc/tcl/xpm_cdc_single.tcl]. These constraints will be ignored for synthesis but will be used in implementation. Impacted constraints are listed in the file [.Xil/mts_synchronizeSYSREF_0_propImpl.xdc].
+Resolution: To avoid this warning, move constraints listed in [.Xil/mts_synchronizeSYSREF_0_propImpl.xdc] to another XDC file and exclude this new file from synthesis with the used_in_synthesis property (File Properties dialog in GUI) and re-run elaboration/synthesis.
+INFO: [Project 1-1714] 1 XPM XDC files have been applied to the design.
+Completed Processing XDC Constraints
+
+Netlist sorting complete. Time (s): cpu = 00:00:00 ; elapsed = 00:00:00.001 . Memory (MB): peak = 2795.500 ; gain = 0.000
+INFO: [Project 1-111] Unisim Transformation Summary:
+No Unisim elements were transformed.
+
+Constraint Validation Runtime : Time (s): cpu = 00:00:00 ; elapsed = 00:00:00.037 . Memory (MB): peak = 2795.500 ; gain = 0.000
+INFO: [Designutils 20-5008] Incremental synthesis strategy off
+INFO: [Synth 8-11241] undeclared symbol 'REGCCE', assumed default net type 'wire' [C:/Xilinx/Vivado/2022.2/data/verilog/src/unimacro/BRAM_SINGLE_MACRO.v:2170]
+---------------------------------------------------------------------------------
+Finished Constraint Validation : Time (s): cpu = 00:00:34 ; elapsed = 00:00:59 . Memory (MB): peak = 2795.500 ; gain = 512.133
+---------------------------------------------------------------------------------
+---------------------------------------------------------------------------------
+Start Loading Part and Timing Information
+---------------------------------------------------------------------------------
+Loading part: xczu48dr-ffvg1517-2-e
+INFO: [Synth 8-6742] Reading net delay rules and data
+---------------------------------------------------------------------------------
+Finished Loading Part and Timing Information : Time (s): cpu = 00:00:34 ; elapsed = 00:00:59 . Memory (MB): peak = 2795.500 ; gain = 512.133
+---------------------------------------------------------------------------------
+---------------------------------------------------------------------------------
+Start Applying 'set_property' XDC Constraints
+---------------------------------------------------------------------------------
+Applied set_property KEEP_HIERARCHY = SOFT for inst. (constraint file  C:/Work/FPGA/RFSoC-MTS/boards/RFSoC4x2/build_mts/mts/mts.runs/mts_synchronizeSYSREF_0_synth_1/dont_touch.xdc, line 9).
+Applied set_property KEEP_HIERARCHY = SOFT for inst/xsingle. (constraint file  auto generated constraint).
+---------------------------------------------------------------------------------
+Finished applying 'set_property' XDC Constraints : Time (s): cpu = 00:00:34 ; elapsed = 00:00:59 . Memory (MB): peak = 2795.500 ; gain = 512.133
+---------------------------------------------------------------------------------
+---------------------------------------------------------------------------------
+Finished RTL Optimization Phase 2 : Time (s): cpu = 00:00:34 ; elapsed = 00:01:00 . Memory (MB): peak = 2795.500 ; gain = 512.133
+---------------------------------------------------------------------------------
+---------------------------------------------------------------------------------
+Start RTL Component Statistics 
+---------------------------------------------------------------------------------
+Detailed RTL Component Info : 
++---Registers : 
+	                2 Bit    Registers := 1     
+	                1 Bit    Registers := 1     
+---------------------------------------------------------------------------------
+Finished RTL Component Statistics 
+---------------------------------------------------------------------------------
+---------------------------------------------------------------------------------
+Start Part Resource Summary
+---------------------------------------------------------------------------------
+Part Resources:
+DSPs: 4272 (col length:192)
+BRAMs: 2160 (col length: RAMB18 192 RAMB36 96)
+---------------------------------------------------------------------------------
+Finished Part Resource Summary
+---------------------------------------------------------------------------------
+---------------------------------------------------------------------------------
+Start Cross Boundary and Area Optimization
+---------------------------------------------------------------------------------
+WARNING: [Synth 8-7080] Parallel synthesis criteria is not met
+WARNING: [Synth 8-7129] Port dest_out_bin[0] in module xpm_cdc_gen_v1_0_2 is either unconnected or has no load
+WARNING: [Synth 8-7129] Port src_rcv in module xpm_cdc_gen_v1_0_2 is either unconnected or has no load
+WARNING: [Synth 8-7129] Port dest_req in module xpm_cdc_gen_v1_0_2 is either unconnected or has no load
+WARNING: [Synth 8-7129] Port dest_pulse in module xpm_cdc_gen_v1_0_2 is either unconnected or has no load
+WARNING: [Synth 8-7129] Port dest_rst_out in module xpm_cdc_gen_v1_0_2 is either unconnected or has no load
+WARNING: [Synth 8-7129] Port dest_arst in module xpm_cdc_gen_v1_0_2 is either unconnected or has no load
+WARNING: [Synth 8-7129] Port src_in_bin[0] in module xpm_cdc_gen_v1_0_2 is either unconnected or has no load
+WARNING: [Synth 8-7129] Port src_send in module xpm_cdc_gen_v1_0_2 is either unconnected or has no load
+WARNING: [Synth 8-7129] Port dest_ack in module xpm_cdc_gen_v1_0_2 is either unconnected or has no load
+WARNING: [Synth 8-7129] Port src_pulse in module xpm_cdc_gen_v1_0_2 is either unconnected or has no load
+WARNING: [Synth 8-7129] Port src_rst in module xpm_cdc_gen_v1_0_2 is either unconnected or has no load
+WARNING: [Synth 8-7129] Port dest_rst_in in module xpm_cdc_gen_v1_0_2 is either unconnected or has no load
+WARNING: [Synth 8-7129] Port src_arst in module xpm_cdc_gen_v1_0_2 is either unconnected or has no load
+---------------------------------------------------------------------------------
+Finished Cross Boundary and Area Optimization : Time (s): cpu = 00:00:38 ; elapsed = 00:01:04 . Memory (MB): peak = 2795.500 ; gain = 512.133
+---------------------------------------------------------------------------------
+---------------------------------------------------------------------------------
+Start Applying XDC Timing Constraints
+---------------------------------------------------------------------------------
+---------------------------------------------------------------------------------
+Finished Applying XDC Timing Constraints : Time (s): cpu = 00:00:56 ; elapsed = 00:01:33 . Memory (MB): peak = 3185.820 ; gain = 902.453
+---------------------------------------------------------------------------------
+---------------------------------------------------------------------------------
+Start Timing Optimization
+---------------------------------------------------------------------------------
+---------------------------------------------------------------------------------
+Finished Timing Optimization : Time (s): cpu = 00:00:56 ; elapsed = 00:01:33 . Memory (MB): peak = 3185.820 ; gain = 902.453
+---------------------------------------------------------------------------------
+---------------------------------------------------------------------------------
+Start Technology Mapping
+---------------------------------------------------------------------------------
+---------------------------------------------------------------------------------
+Finished Technology Mapping : Time (s): cpu = 00:00:56 ; elapsed = 00:01:33 . Memory (MB): peak = 3204.941 ; gain = 921.574
+---------------------------------------------------------------------------------
+---------------------------------------------------------------------------------
+Start IO Insertion
+---------------------------------------------------------------------------------
+---------------------------------------------------------------------------------
+Start Flattening Before IO Insertion
+---------------------------------------------------------------------------------
+---------------------------------------------------------------------------------
+Finished Flattening Before IO Insertion
+---------------------------------------------------------------------------------
+---------------------------------------------------------------------------------
+Start Final Netlist Cleanup
+---------------------------------------------------------------------------------
+---------------------------------------------------------------------------------
+Finished Final Netlist Cleanup
+---------------------------------------------------------------------------------
+---------------------------------------------------------------------------------
+Finished IO Insertion : Time (s): cpu = 00:01:06 ; elapsed = 00:01:44 . Memory (MB): peak = 3209.664 ; gain = 926.297
+---------------------------------------------------------------------------------
+---------------------------------------------------------------------------------
+Start Renaming Generated Instances
+---------------------------------------------------------------------------------
+---------------------------------------------------------------------------------
+Finished Renaming Generated Instances : Time (s): cpu = 00:01:06 ; elapsed = 00:01:44 . Memory (MB): peak = 3209.664 ; gain = 926.297
+---------------------------------------------------------------------------------
+---------------------------------------------------------------------------------
+Start Rebuilding User Hierarchy
+---------------------------------------------------------------------------------
+---------------------------------------------------------------------------------
+Finished Rebuilding User Hierarchy : Time (s): cpu = 00:01:06 ; elapsed = 00:01:44 . Memory (MB): peak = 3209.664 ; gain = 926.297
+---------------------------------------------------------------------------------
+---------------------------------------------------------------------------------
+Start Renaming Generated Ports
+---------------------------------------------------------------------------------
+---------------------------------------------------------------------------------
+Finished Renaming Generated Ports : Time (s): cpu = 00:01:06 ; elapsed = 00:01:44 . Memory (MB): peak = 3209.664 ; gain = 926.297
+---------------------------------------------------------------------------------
+---------------------------------------------------------------------------------
+Start Handling Custom Attributes
+---------------------------------------------------------------------------------
+---------------------------------------------------------------------------------
+Finished Handling Custom Attributes : Time (s): cpu = 00:01:06 ; elapsed = 00:01:44 . Memory (MB): peak = 3209.664 ; gain = 926.297
+---------------------------------------------------------------------------------
+---------------------------------------------------------------------------------
+Start Renaming Generated Nets
+---------------------------------------------------------------------------------
+---------------------------------------------------------------------------------
+Finished Renaming Generated Nets : Time (s): cpu = 00:01:06 ; elapsed = 00:01:44 . Memory (MB): peak = 3209.664 ; gain = 926.297
+---------------------------------------------------------------------------------
+---------------------------------------------------------------------------------
+Start Writing Synthesis Report
+---------------------------------------------------------------------------------
+
+Report BlackBoxes: 
++-+--------------+----------+
+| |BlackBox name |Instances |
++-+--------------+----------+
++-+--------------+----------+
+
+Report Cell Usage: 
++------+-----+------+
+|      |Cell |Count |
++------+-----+------+
+|1     |FDRE |     3|
++------+-----+------+
+---------------------------------------------------------------------------------
+Finished Writing Synthesis Report : Time (s): cpu = 00:01:06 ; elapsed = 00:01:44 . Memory (MB): peak = 3209.664 ; gain = 926.297
+---------------------------------------------------------------------------------
+Synthesis finished with 0 errors, 0 critical warnings and 14 warnings.
+Synthesis Optimization Runtime : Time (s): cpu = 00:00:42 ; elapsed = 00:01:28 . Memory (MB): peak = 3209.664 ; gain = 874.844
+Synthesis Optimization Complete : Time (s): cpu = 00:01:06 ; elapsed = 00:01:44 . Memory (MB): peak = 3209.664 ; gain = 926.297
+INFO: [Project 1-571] Translating synthesized netlist
+Netlist sorting complete. Time (s): cpu = 00:00:00 ; elapsed = 00:00:00 . Memory (MB): peak = 3222.754 ; gain = 0.000
+INFO: [Project 1-570] Preparing netlist for logic optimization
+INFO: [Opt 31-138] Pushed 0 inverter(s) to 0 load pin(s).
+Netlist sorting complete. Time (s): cpu = 00:00:00 ; elapsed = 00:00:00 . Memory (MB): peak = 3270.055 ; gain = 0.000
+INFO: [Project 1-111] Unisim Transformation Summary:
+No Unisim elements were transformed.
+
+Synth Design complete, checksum: 522b8359
+INFO: [Common 17-83] Releasing license: Synthesis
+27 Infos, 34 Warnings, 0 Critical Warnings and 0 Errors encountered.
+synth_design completed successfully
+synth_design: Time (s): cpu = 00:01:15 ; elapsed = 00:02:40 . Memory (MB): peak = 3270.055 ; gain = 2048.137
+INFO: [Common 17-1381] The checkpoint 'C:/Work/FPGA/RFSoC-MTS/boards/RFSoC4x2/build_mts/mts/mts.runs/mts_synchronizeSYSREF_0_synth_1/mts_synchronizeSYSREF_0.dcp' has been generated.
+INFO: [Coretcl 2-1648] Added synthesis output to IP cache for IP mts_synchronizeSYSREF_0, cache-ID = 2ae93ce58b833f5b
+INFO: [Coretcl 2-1174] Renamed 2 cell refs.
+INFO: [Common 17-1381] The checkpoint 'C:/Work/FPGA/RFSoC-MTS/boards/RFSoC4x2/build_mts/mts/mts.runs/mts_synchronizeSYSREF_0_synth_1/mts_synchronizeSYSREF_0.dcp' has been generated.
+INFO: [runtcl-4] Executing : report_utilization -file mts_synchronizeSYSREF_0_utilization_synth.rpt -pb mts_synchronizeSYSREF_0_utilization_synth.pb
+INFO: [Common 17-206] Exiting Vivado at Mon Jun 19 19:33:49 2023...

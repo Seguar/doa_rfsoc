@@ -1,0 +1,27 @@
+#-----------------------------------------------------------
+# Vivado v2022.2.2 (64-bit)
+# SW Build 3788238 on Tue Feb 21 20:00:34 MST 2023
+# IP Build 3783773 on Tue Feb 21 23:41:56 MST 2023
+# Start of session at: Mon Jun 19 19:34:12 2023
+# Process ID: 22436
+# Current directory: C:/Work/FPGA/RFSoC-MTS/boards/RFSoC4x2/build_mts/mts/mts.runs/mts_axi_gpio_fifoflush_0_synth_1
+# Command line: vivado.exe -log mts_axi_gpio_fifoflush_0.vds -product Vivado -mode batch -messageDb vivado.pb -notrace -source mts_axi_gpio_fifoflush_0.tcl
+# Log file: C:/Work/FPGA/RFSoC-MTS/boards/RFSoC4x2/build_mts/mts/mts.runs/mts_axi_gpio_fifoflush_0_synth_1/mts_axi_gpio_fifoflush_0.vds
+# Journal file: C:/Work/FPGA/RFSoC-MTS/boards/RFSoC4x2/build_mts/mts/mts.runs/mts_axi_gpio_fifoflush_0_synth_1\vivado.jou
+# Running On: Sega, OS: Windows, CPU Frequency: 2695 MHz, CPU Physical cores: 16, Host memory: 29793 MB
+#-----------------------------------------------------------
+source mts_axi_gpio_fifoflush_0.tcl -notrace
+create_project: Time (s): cpu = 00:00:08 ; elapsed = 00:00:10 . Memory (MB): peak = 1148.809 ; gain = 122.195
+INFO: [IP_Flow 19-234] Refreshing IP repositories
+WARNING: [IP_Flow 19-2248] Failed to load user IP repository 'c:/Work/FPGA/RFSoC-MTS/ip'; Can't find the specified path.
+If this directory should no longer be in your list of user repositories, go to the IP Settings dialog and remove it.
+INFO: [IP_Flow 19-2313] Loaded Vivado IP repository 'C:/Xilinx/Vivado/2022.2/data/ip'.
+INFO: [IP_Flow 19-6924] IPCACHE: Running cache check for IP inst: mts_axi_gpio_fifoflush_0
+INFO: [IP_Flow 19-6922] IPCACHE: Exporting cached entry 705ce3bda95e377e to dir: C:/Work/FPGA/RFSoC-MTS/boards/RFSoC4x2/build_mts/mts/mts.runs/mts_axi_gpio_fifoflush_0_synth_1
+INFO: [IP_Flow 19-6928] IPCACHE: copied cached file c:/Work/FPGA/RFSoC-MTS/boards/RFSoC4x2/build_mts/mts/mts.cache/ip/2022.2.2/7/0/705ce3bda95e377e/mts_axi_gpio_bram_adc_0.dcp to C:/Work/FPGA/RFSoC-MTS/boards/RFSoC4x2/build_mts/mts/mts.runs/mts_axi_gpio_fifoflush_0_synth_1/mts_axi_gpio_fifoflush_0.dcp.
+INFO: [IP_Flow 19-6928] IPCACHE: copied cached file c:/Work/FPGA/RFSoC-MTS/boards/RFSoC4x2/build_mts/mts/mts.cache/ip/2022.2.2/7/0/705ce3bda95e377e/mts_axi_gpio_bram_adc_0_sim_netlist.v to C:/Work/FPGA/RFSoC-MTS/boards/RFSoC4x2/build_mts/mts/mts.runs/mts_axi_gpio_fifoflush_0_synth_1/mts_axi_gpio_fifoflush_0_sim_netlist.v.
+INFO: [IP_Flow 19-6928] IPCACHE: copied cached file c:/Work/FPGA/RFSoC-MTS/boards/RFSoC4x2/build_mts/mts/mts.cache/ip/2022.2.2/7/0/705ce3bda95e377e/mts_axi_gpio_bram_adc_0_sim_netlist.vhdl to C:/Work/FPGA/RFSoC-MTS/boards/RFSoC4x2/build_mts/mts/mts.runs/mts_axi_gpio_fifoflush_0_synth_1/mts_axi_gpio_fifoflush_0_sim_netlist.vhdl.
+INFO: [IP_Flow 19-6928] IPCACHE: copied cached file c:/Work/FPGA/RFSoC-MTS/boards/RFSoC4x2/build_mts/mts/mts.cache/ip/2022.2.2/7/0/705ce3bda95e377e/mts_axi_gpio_bram_adc_0_stub.v to C:/Work/FPGA/RFSoC-MTS/boards/RFSoC4x2/build_mts/mts/mts.runs/mts_axi_gpio_fifoflush_0_synth_1/mts_axi_gpio_fifoflush_0_stub.v.
+INFO: [IP_Flow 19-6928] IPCACHE: copied cached file c:/Work/FPGA/RFSoC-MTS/boards/RFSoC4x2/build_mts/mts/mts.cache/ip/2022.2.2/7/0/705ce3bda95e377e/mts_axi_gpio_bram_adc_0_stub.vhdl to C:/Work/FPGA/RFSoC-MTS/boards/RFSoC4x2/build_mts/mts/mts.runs/mts_axi_gpio_fifoflush_0_synth_1/mts_axi_gpio_fifoflush_0_stub.vhdl.
+INFO: [IP_Flow 19-4838] Using cached IP synthesis design for IP mts_axi_gpio_fifoflush_0, cache-ID = 705ce3bda95e377e.
+INFO: [Common 17-206] Exiting Vivado at Mon Jun 19 19:34:36 2023...

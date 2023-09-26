@@ -1,0 +1,13 @@
+#-----------------------------------------------------------
+# Vivado v2022.2.2 (64-bit)
+# SW Build 3788238 on Tue Feb 21 20:00:34 MST 2023
+# IP Build 3783773 on Tue Feb 21 23:41:56 MST 2023
+# Start of session at: Sun Jun 25 16:18:51 2023
+# Process ID: 28284
+# Current directory: C:/Work/FPGA/RFSoC-MTS/boards/RFSoC4x2/build_mts/mts/mts.runs/mts_IQ_product_0_0_synth_1
+# Command line: vivado.exe -log mts_IQ_product_0_0.vds -product Vivado -mode batch -messageDb vivado.pb -notrace -source mts_IQ_product_0_0.tcl
+# Log file: C:/Work/FPGA/RFSoC-MTS/boards/RFSoC4x2/build_mts/mts/mts.runs/mts_IQ_product_0_0_synth_1/mts_IQ_product_0_0.vds
+# Journal file: C:/Work/FPGA/RFSoC-MTS/boards/RFSoC4x2/build_mts/mts/mts.runs/mts_IQ_product_0_0_synth_1\vivado.jou
+# Running On: Sega, OS: Windows, CPU Frequency: 2695 MHz, CPU Physical cores: 16, Host memory: 29793 MB
+#-----------------------------------------------------------
+source mts_IQ_product_0_0.tcl -notrace
