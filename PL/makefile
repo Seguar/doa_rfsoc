@@ -3,14 +3,14 @@
 # SPDX-License-Identifier: MIT
 # ---- ---- ---- ---- ---- ---- ---- ---- ---- ---- ---- ---- ---- ---- ---- ---- ---- ---- ---- --
 
-all: board_files block_design bitstream check_timing handoff
+all: block_design bitstream check_timing handoff
 	@echo
 	@tput setaf 2 ; echo "Built overlays successfully!!"; tput sgr0;
 	@echo
 
-board_files:
-	wget "https://www.realdigital.org/downloads/9d2af32116d5420d25da904f6a06bb1f.zip" --no-check-certificate -O bf.zip && \
-	unzip bf.zip -d board_files && rm bf.zip
+# board_files:
+# 	wget "https://www.realdigital.org/downloads/9d2af32116d5420d25da904f6a06bb1f.zip" --no-check-certificate -O bf.zip && \
+# 	unzip bf.zip -d board_files && rm bf.zip
 
 block_design:
 	vivado -mode batch -source doa_mts.tcl
@@ -25,4 +25,4 @@ handoff:
 	vivado -mode batch -source handoff.tcl -notrace -tclargs doa_mts
 
 clean:
-	rm -rf doa_mts *.jou *.log NA .Xil *.xsa *.hwh *.bit
+	rm -rf doa_mts myproj .srcs .gen *.jou *.log NA .Xil 

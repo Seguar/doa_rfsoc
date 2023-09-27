@@ -59,6 +59,19 @@ if { $list_projs eq "" } {
 variable design_name
 set design_name doa_mts
 
+# Set IP repository paths
+set obj [get_filesets sources_1]
+if { $obj != {} } {
+   set_property "ip_repo_paths" "[file normalize "$origin_dir/src"]" $obj
+
+   # Rebuild user ip_repo's index before adding any source files
+   update_ip_catalog -rebuild
+}
+
+# Set 'sources_1' fileset object
+set obj [get_filesets sources_1]
+set files [glob "${origin_dir}/src/*"]
+add_files -norecurse -fileset $obj $files
 # If you do not already have an existing IP Integrator design open,
 # you can create a design using the following command:
 #    create_bd_design $design_name
@@ -2420,4 +2433,6 @@ Port;FD4A0000;FD4AFFFF;1|FPD;DPDMA;FD4C0000;FD4CFFFF;1|FPD;DDR_XMPU5_CFG;FD05000
 
 create_root_design ""
 
-
+make_wrapper -files [get_files ./myproj/project_1.srcs/sources_1/bd/$design_name/$design_name.bd] -top
+add_files -norecurse ./myproj/project_1.gen/sources_1/bd/$design_name/hdl/$design_name\_wrapper.v
+update_compile_order -fileset sources_1

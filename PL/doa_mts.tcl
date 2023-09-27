@@ -1,9 +1,14 @@
-# User part
+## User part
+# CHANGE DESIGN NAME HERE
+variable design_name
+set design_name doa_mts
+
+set origin_dir "."
 # Set 'constrs_1' fileset object
 set obj [get_filesets constrs_1]
 
 # Add/Import constrs file and set constrs file properties
-set file "[file normalize "$origin_dir/xdc/*.xdc"]"
+set file "[file normalize "$origin_dir/xdc/$design_name.xdc"]"
 set file_added [add_files -norecurse -fileset $obj [list $file]]
 set file "$origin_dir/xdc/*.xdc"
 set file [file normalize $file]
@@ -24,10 +29,16 @@ if { $obj != {} } {
 
 # Set 'sources_1' fileset object
 set obj [get_filesets sources_1]
-set files [list \
- [file normalize "${origin_dir}/src/*"]
-]
+set files [glob "${origin_dir}/src/*"]
 add_files -norecurse -fileset $obj $files
+
+set_property source_mgmt_mode All [current_project]
+update_compile_order -fileset sources_1
+
+set obj [get_filesets sources_1]
+set_property -name "top" -value "$design_name" -objects $obj
+set_property -name "top_auto_set" -value "0" -objects $obj
+##
 
 # Vivado tcl export script:
 ################################################################
@@ -83,11 +94,6 @@ if { $list_projs eq "" } {
    create_project project_1 myproj -part xczu48dr-ffvg1517-2-e
    set_property BOARD_PART realdigital.org:rfsoc4x2:part0:1.0 [current_project]
 }
-
-
-# CHANGE DESIGN NAME HERE
-variable design_name
-set design_name doa_mts
 
 # If you do not already have an existing IP Integrator design open,
 # you can create a design using the following command:
