@@ -1,0 +1,13 @@
+#-----------------------------------------------------------
+# Vivado v2022.2.2 (64-bit)
+# SW Build 3788238 on Tue Feb 21 20:00:34 MST 2023
+# IP Build 3783773 on Tue Feb 21 23:41:56 MST 2023
+# Start of session at: Sun Jun 25 15:52:49 2023
+# Process ID: 11152
+# Current directory: C:/Users/sega-/OneDrive/Documents/Xilinx/IQ_product
+# Command line: vivado.exe -mode batch -source ProjectGeneration.tcl -notrace
+# Log file: C:/Users/sega-/OneDrive/Documents/Xilinx/IQ_product/vivado.log
+# Journal file: C:/Users/sega-/OneDrive/Documents/Xilinx/IQ_product\vivado.jou
+# Running On: Sega, OS: Windows, CPU Frequency: 2695 MHz, CPU Physical cores: 16, Host memory: 29793 MB
+#-----------------------------------------------------------
+source ProjectGeneration.tcl -notrace
