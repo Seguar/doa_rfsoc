@@ -13,7 +13,7 @@ all: block_design bitstream check_timing handoff
 # 	unzip bf.zip -d board_files && rm bf.zip
 
 block_design:
-	vivado -mode batch -source doa_mts.tcl
+	vivado -mode batch -source build.tcl
 
 bitstream:
 	vivado -mode batch -source build_bitstream.tcl -notrace -tclargs doa_mts
