@@ -82,7 +82,7 @@ set_property -name "file_type" -value "XDC" -objects $file_obj
 
 # Set 'constrs_1' fileset properties
 set obj [get_filesets constrs_1]
-set_property target_constrs_file $origin_dir/$design_name.xdc [current_fileset -constrset]
+set_property target_constrs_file $origin_dir/xdc/$design_name.xdc [current_fileset -constrset]
 # Set 'sources_1' fileset object
 set obj [get_filesets sources_1]
 set files [glob "${origin_dir}/src/*"]
