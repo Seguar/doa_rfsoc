@@ -91,6 +91,15 @@ architecture rtl of iq_prod is
         output := not(unsigned(input)) + 1;
         return std_logic_vector(output);
     end function;
+-- Input axis
+    signal axis_di0_s : std_logic_vector(bits - 1 downto 0) := (others => '0'); 
+    signal axis_di1_s : std_logic_vector(bits - 1 downto 0) := (others => '0'); 
+    signal axis_di2_s : std_logic_vector(bits - 1 downto 0) := (others => '0'); 
+    signal axis_di3_s : std_logic_vector(bits - 1 downto 0) := (others => '0'); 
+    signal axis_dq0_s : std_logic_vector(bits - 1 downto 0) := (others => '0'); 
+    signal axis_dq1_s : std_logic_vector(bits - 1 downto 0) := (others => '0'); 
+    signal axis_dq2_s : std_logic_vector(bits - 1 downto 0) := (others => '0'); 
+    signal axis_dq3_s : std_logic_vector(bits - 1 downto 0) := (others => '0'); 
 -- Input valids
     signal m0_iv    : std_logic        := '0';
     signal m0_qv    : std_logic        := '0';
@@ -156,19 +165,39 @@ architecture rtl of iq_prod is
     signal m7_d_s   : std_logic_vector(bits*4 - 1 downto 0) := (others => '0');
     signal m8_d_s   : std_logic_vector(bits*4 - 1 downto 0) := (others => '0');
     signal m9_d_s   : std_logic_vector(bits*4 - 1 downto 0) := (others => '0');
+
+COMPONENT cmpy_0
+PORT (
+  aclk : IN STD_LOGIC;
+  s_axis_a_tvalid : IN STD_LOGIC;
+  s_axis_a_tdata : IN STD_LOGIC_VECTOR(31 DOWNTO 0);
+  s_axis_b_tvalid : IN STD_LOGIC;
+  s_axis_b_tdata : IN STD_LOGIC_VECTOR(31 DOWNTO 0);
+  m_axis_dout_tvalid : OUT STD_LOGIC;
+  m_axis_dout_tdata : OUT STD_LOGIC_VECTOR(63 DOWNTO 0) 
+);
+END COMPONENT;
 begin
     process (aclk)
     begin
         if rising_edge(aclk) then
-            -- m0_iv <= 
-            c0_d <= axis_dq0 & axis_di0;
-            c0_d_c <= conj(axis_dq0) & axis_di0;
-            c1_d <= axis_dq1 & axis_di1;
-            c1_d_c <= conj(axis_dq1) & axis_di1;
-            c2_d <= axis_dq2 & axis_di2;
-            c2_d_c <= conj(axis_dq2) & axis_di2;
-            c3_d <= axis_dq3 & axis_di3;
-            c3_d_c <= conj(axis_dq3) & axis_di3;
+            axis_di0_s <= axis_di0;
+            axis_dq0_s <= axis_dq0;
+            axis_di1_s <= axis_di1;
+            axis_dq1_s <= axis_dq1;
+            axis_di2_s <= axis_di2;
+            axis_dq2_s <= axis_dq2;
+            axis_di3_s <= axis_di3;
+            axis_dq3_s <= axis_dq3;
+
+            c0_d <= axis_dq0_s & axis_di0_s;
+            c0_d_c <= conj(axis_dq0_s) & axis_di0_s;
+            c1_d <= axis_dq1_s & axis_di1_s;
+            c1_d_c <= conj(axis_dq1_s) & axis_di1_s;
+            c2_d <= axis_dq2_s & axis_di2_s;
+            c2_d_c <= conj(axis_dq2_s) & axis_di2_s;
+            c3_d <= axis_dq3_s & axis_di3_s;
+            c3_d_c <= conj(axis_dq3_s) & axis_di3_s;
 
             m0_d_s <= m0_d;
             m1_d_s <= m1_d;
@@ -184,8 +213,8 @@ begin
             c0_v <=  m9_v and m8_v and m7_v and m6_v and m5_v and m4_v and m3_v and m2_v and m1_v and m0_v;
         end if;
     end process;
-    
-    m0 : cmpy_0
+
+    m0 : cmpy_0 
     PORT MAP (
         aclk => aclk,
         s_axis_a_tvalid => '1',
@@ -195,7 +224,7 @@ begin
         m_axis_dout_tvalid => m0_v,
         m_axis_dout_tdata => m0_d
     );
-
+ 
     m1 : cmpy_0
     PORT MAP (
         aclk => aclk,
