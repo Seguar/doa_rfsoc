@@ -2,7 +2,7 @@ variable design_name
 set design_name doa_mts
 set origin_dir "." 
 
-source doa_mts_prj2.tcl
+source doa_mts_prj.tcl
 # Set IP repository paths
 set obj [get_filesets sources_1]
 if { $obj != {} } {
@@ -34,7 +34,7 @@ add_files -norecurse -fileset $obj $files
 set_property source_mgmt_mode All [current_project]
 update_compile_order -fileset sources_1
 
-create_root_design ""
+# create_root_design ""
 
 make_wrapper -files [get_files $origin_dir/myproj/project_1.srcs/sources_1/bd/$design_name/$design_name.bd] -top
 add_files -norecurse $origin_dir/myproj/project_1.gen/sources_1/bd/$design_name/hdl/$design_name\_wrapper.v
