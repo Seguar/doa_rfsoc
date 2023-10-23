@@ -44,7 +44,7 @@ entity iq_prod is
         axis_vq3 : in std_logic; 
         axis_rq3 : out std_logic;
         
-        axis_do0 : out std_logic_vector(bits * streams/2 * mult_num - 1 downto 0); 
+        axis_do0 : out std_logic_vector(bits*2 * streams*2 - 1 downto 0); 
         axis_vo0 : out std_logic; 
         axis_ro0 : in std_logic
     );
@@ -214,7 +214,7 @@ begin
         end if;
     end process;
 
-    m0 : cmpy_0 
+    m0 : cmpy_0 --2
     PORT MAP (
         aclk => aclk,
         s_axis_a_tvalid => '1',
@@ -258,7 +258,7 @@ begin
         m_axis_dout_tdata => m3_d
     );
 
-    m4 : cmpy_0
+    m4 : cmpy_0 --10
     PORT MAP (
         aclk => aclk,
         s_axis_a_tvalid => '1',
@@ -291,7 +291,7 @@ begin
         m_axis_dout_tdata => m6_d
     );
 
-    m7 : cmpy_0
+    m7 : cmpy_0 --16
     PORT MAP (
         aclk => aclk,
         s_axis_a_tvalid => '1',
@@ -313,7 +313,7 @@ begin
         m_axis_dout_tdata => m8_d
     );
 
-    m9 : cmpy_0
+    m9 : cmpy_0 --20
     PORT MAP (
         aclk => aclk,
         s_axis_a_tvalid => '1',
@@ -324,9 +324,18 @@ begin
         m_axis_dout_tdata => m9_d
     );
 
-    axis_do0 <= m9_d_s & m8_d_s & m7_d_s & m6_d_s & m5_d_s & m4_d_s & m3_d_s & m2_d_s & m1_d_s & m0_d_s;
-    axis_vo0 <= c0_v;
+    axis_do0 <= m9_d_s(31 downto 0) & m8_d_s & m7_d_s(31 downto 0) & m6_d_s & m5_d_s & m4_d_s(31 downto 0) & m3_d_s & m2_d_s & m1_d_s & m0_d_s(31 downto 0);
+    -- axis_vo0 <= c0_v;
+    axis_vo0 <= '1';
 
+    axis_ri0 <= '1';
+    axis_rq0 <= '1';
+    axis_ri1 <= '1';
+    axis_rq1 <= '1';
+    axis_ri2 <= '1';
+    axis_rq2 <= '1';
+    axis_ri3 <= '1';
+    axis_rq3 <= '1';
 end architecture;
 
 
