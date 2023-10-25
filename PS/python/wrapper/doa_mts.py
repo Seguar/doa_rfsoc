@@ -133,7 +133,6 @@ class doaMtsOverlay(Overlay):
         if (Xstatus != 1):
             raise Exception("The MTS ClockTree has failed to LOCK. Please verify board clocking configuration")
 
-
     def trigger_capture(self):
         """ Internal loopback of DAC waveform to internal capture mirror"""        
         self.trig_cap.off()
