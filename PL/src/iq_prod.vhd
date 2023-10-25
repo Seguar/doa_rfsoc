@@ -217,7 +217,7 @@ begin
         end if;
     end process;
 
-    m0 : cmpy_0 --2
+    m0 : cmpy_0 --2 (imag part = zero)
     PORT MAP (
         aclk => aclk,
         s_axis_a_tvalid => '1',
@@ -261,7 +261,7 @@ begin
         m_axis_dout_tdata => m3_d
     );
 
-    m4 : cmpy_0 --10
+    m4 : cmpy_0 --10 (imag part = zero)
     PORT MAP (
         aclk => aclk,
         s_axis_a_tvalid => '1',
@@ -294,7 +294,7 @@ begin
         m_axis_dout_tdata => m6_d
     );
 
-    m7 : cmpy_0 --16
+    m7 : cmpy_0 --16 (imag part = zero)
     PORT MAP (
         aclk => aclk,
         s_axis_a_tvalid => '1',
@@ -316,7 +316,7 @@ begin
         m_axis_dout_tdata => m8_d
     );
 
-    m9 : cmpy_0 --20
+    m9 : cmpy_0 --20 (imag part = zero)
     PORT MAP (
         aclk => aclk,
         s_axis_a_tvalid => '1',
