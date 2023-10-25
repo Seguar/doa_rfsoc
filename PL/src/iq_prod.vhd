@@ -1,3 +1,6 @@
+-- TODO width optimizations (reduce inputs from 16 to 14 and process data with full precision), 
+-- arrays instead of signals for reuse
+-- instance not like component
 library ieee;
 use ieee.std_logic_1164.all;
 use ieee.numeric_std.all;
