@@ -132,7 +132,6 @@ set bCheckIPs 1
 if { $bCheckIPs == 1 } {
    set list_check_ips "\ 
 xilinx.com:ip:smartconnect:1.0\
-xilinx.com:ip:system_ila:1.1\
 xilinx.com:ip:usp_rf_data_converter:2.6\
 xilinx.com:ip:util_ds_buf:2.2\
 xilinx.com:ip:zynq_ultra_ps_e:3.4\
@@ -1429,23 +1428,6 @@ proc create_root_design { parentCell } {
   # Create instance: dac_1
   create_hier_cell_dac_1 [current_bd_instance .] dac_1
 
-  # Create instance: system_ila_0, and set properties
-  set system_ila_0 [ create_bd_cell -type ip -vlnv xilinx.com:ip:system_ila:1.1 system_ila_0 ]
-  set_property -dict [list \
-    CONFIG.C_MON_TYPE {MIX} \
-    CONFIG.C_NUM_MONITOR_SLOTS {2} \
-    CONFIG.C_NUM_OF_PROBES {1} \
-    CONFIG.C_SLOT_0_APC_EN {0} \
-    CONFIG.C_SLOT_0_AXI_DATA_SEL {1} \
-    CONFIG.C_SLOT_0_AXI_TRIG_SEL {1} \
-    CONFIG.C_SLOT_0_INTF_TYPE {xilinx.com:interface:axis_rtl:1.0} \
-    CONFIG.C_SLOT_1_APC_EN {0} \
-    CONFIG.C_SLOT_1_AXI_DATA_SEL {1} \
-    CONFIG.C_SLOT_1_AXI_TRIG_SEL {1} \
-    CONFIG.C_SLOT_1_INTF_TYPE {xilinx.com:interface:axis_rtl:1.0} \
-  ] $system_ila_0
-
-
   # Create instance: usp_rf_data_converter_1, and set properties
   set usp_rf_data_converter_1 [ create_bd_cell -type ip -vlnv xilinx.com:ip:usp_rf_data_converter:2.6 usp_rf_data_converter_1 ]
   set_property -dict [list \
@@ -2662,8 +2644,6 @@ Port;FD4A0000;FD4AFFFF;1|FPD;DPDMA;FD4C0000;FD4CFFFF;1|FPD;DDR_XMPU5_CFG;FD05000
 
 
   # Create interface connections
-connect_bd_intf_net -intf_net Conn2 [get_bd_intf_pins URAM_capture/CAP_AXIS] [get_bd_intf_pins system_ila_0/SLOT_0_AXIS]
-connect_bd_intf_net -intf_net Conn3 [get_bd_intf_pins URAM_prod/CAP_AXIS] [get_bd_intf_pins system_ila_0/SLOT_1_AXIS]
   connect_bd_intf_net -intf_net PL_CLK_p [get_bd_intf_ports PL_CLK] [get_bd_intf_pins util_ds_buf_1/CLK_IN_D]
   connect_bd_intf_net -intf_net PL_SYSREF_p [get_bd_intf_ports PL_SYSREF] [get_bd_intf_pins util_ds_buf_0/CLK_IN_D]
   connect_bd_intf_net -intf_net S00_AXIS_1 [get_bd_intf_pins URAM_capture/S00_AXIS] [get_bd_intf_pins broadcast/M00_AXIS]
@@ -2723,13 +2703,13 @@ connect_bd_intf_net -intf_net Conn3 [get_bd_intf_pins URAM_prod/CAP_AXIS] [get_b
   connect_bd_net -net clocktreeMTS_ingress_aresetn [get_bd_pins URAM_capture/aresetn] [get_bd_pins URAM_prod/aresetn] [get_bd_pins broadcast/aresetn] [get_bd_pins clocktreeMTS/ingress_aresetn] [get_bd_pins usp_rf_data_converter_1/m0_axis_aresetn] [get_bd_pins usp_rf_data_converter_1/m1_axis_aresetn] [get_bd_pins usp_rf_data_converter_1/m2_axis_aresetn] [get_bd_pins usp_rf_data_converter_1/m3_axis_aresetn]
   connect_bd_net -net clocktreeMTS_interrupt [get_bd_pins clocktreeMTS/interrupt] [get_bd_pins control/In2]
   connect_bd_net -net control_dout [get_bd_pins control/dout] [get_bd_pins zynq_ultra_ps_e_0/pl_ps_irq0]
-  connect_bd_net -net proc_sys_reset_0_peripheral_aresetn [get_bd_pins URAM_capture/s_axi_aresetn] [get_bd_pins URAM_prod/s_axi_aresetn] [get_bd_pins axi_smc/aresetn] [get_bd_pins clocktreeMTS/s_axi_aresetn] [get_bd_pins control/s_axi_aresetn] [get_bd_pins dac_0/s_axi_aresetn] [get_bd_pins dac_1/s_axi_aresetn] [get_bd_pins system_ila_0/resetn] [get_bd_pins usp_rf_data_converter_1/s_axi_aresetn]
+  connect_bd_net -net proc_sys_reset_0_peripheral_aresetn [get_bd_pins URAM_capture/s_axi_aresetn] [get_bd_pins URAM_prod/s_axi_aresetn] [get_bd_pins axi_smc/aresetn] [get_bd_pins clocktreeMTS/s_axi_aresetn] [get_bd_pins control/s_axi_aresetn] [get_bd_pins dac_0/s_axi_aresetn] [get_bd_pins dac_1/s_axi_aresetn] [get_bd_pins usp_rf_data_converter_1/s_axi_aresetn]
   connect_bd_net -net synchronizeSYSREF_dest_out [get_bd_pins clocktreeMTS/UserSYSREF] [get_bd_pins usp_rf_data_converter_1/user_sysref_adc] [get_bd_pins usp_rf_data_converter_1/user_sysref_dac]
-  connect_bd_net -net trig_cap_1 [get_bd_pins URAM_capture/trig_cap] [get_bd_pins URAM_prod/trig_cap] [get_bd_pins control/trig_cap] [get_bd_pins system_ila_0/probe0]
+  connect_bd_net -net trig_cap_1 [get_bd_pins URAM_capture/trig_cap] [get_bd_pins URAM_prod/trig_cap] [get_bd_pins control/trig_cap]
   set_property HDL_ATTRIBUTE.DEBUG {true} [get_bd_nets trig_cap_1]
   connect_bd_net -net usp_rf_data_converter_1_irq [get_bd_pins control/In1] [get_bd_pins usp_rf_data_converter_1/irq]
   connect_bd_net -net util_reduced_logic_0_Res [get_bd_pins control/dac_enable1] [get_bd_pins dac_0/enable_all] [get_bd_pins dac_0/enable_ch] [get_bd_pins dac_1/enable_all] [get_bd_pins dac_1/enable_ch]
-  connect_bd_net -net zynq_ultra_ps_e_0_pl_clk0 [get_bd_pins URAM_capture/s_axi_aclk] [get_bd_pins URAM_prod/s_axi_aclk] [get_bd_pins axi_smc/aclk] [get_bd_pins clocktreeMTS/s_axi_aclk] [get_bd_pins control/dest_clk] [get_bd_pins control/s_axi_aclk] [get_bd_pins dac_0/s_axi_aclk] [get_bd_pins dac_1/s_axi_aclk] [get_bd_pins system_ila_0/clk] [get_bd_pins usp_rf_data_converter_1/s_axi_aclk] [get_bd_pins zynq_ultra_ps_e_0/maxihpm0_fpd_aclk] [get_bd_pins zynq_ultra_ps_e_0/maxihpm0_lpd_aclk] [get_bd_pins zynq_ultra_ps_e_0/pl_clk0]
+  connect_bd_net -net zynq_ultra_ps_e_0_pl_clk0 [get_bd_pins URAM_capture/s_axi_aclk] [get_bd_pins URAM_prod/s_axi_aclk] [get_bd_pins axi_smc/aclk] [get_bd_pins clocktreeMTS/s_axi_aclk] [get_bd_pins control/dest_clk] [get_bd_pins control/s_axi_aclk] [get_bd_pins dac_0/s_axi_aclk] [get_bd_pins dac_1/s_axi_aclk] [get_bd_pins usp_rf_data_converter_1/s_axi_aclk] [get_bd_pins zynq_ultra_ps_e_0/maxihpm0_fpd_aclk] [get_bd_pins zynq_ultra_ps_e_0/maxihpm0_lpd_aclk] [get_bd_pins zynq_ultra_ps_e_0/pl_clk0]
   connect_bd_net -net zynq_ultra_ps_e_0_pl_resetn0 [get_bd_pins clocktreeMTS/ext_reset_in] [get_bd_pins zynq_ultra_ps_e_0/pl_resetn0]
 
   # Create address segments
@@ -2748,7 +2728,6 @@ connect_bd_intf_net -intf_net Conn3 [get_bd_intf_pins URAM_prod/CAP_AXIS] [get_b
   # Restore current instance
   current_bd_instance $oldCurInst
 
-  validate_bd_design
   save_bd_design
 }
 # End of create_root_design()
@@ -2760,4 +2739,6 @@ connect_bd_intf_net -intf_net Conn3 [get_bd_intf_pins URAM_prod/CAP_AXIS] [get_b
 
 create_root_design ""
 
+
+common::send_gid_msg -ssname BD::TCL -id 2053 -severity "WARNING" "This Tcl script was generated from a block design that has not been validated. It is possible that design <$design_name> may result in errors during validation."
 

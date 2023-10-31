@@ -1,4 +1,4 @@
-`timescale 1ns / 1ps
+`timescale 1ps / 1ps
 module iq_prod_tb;
 
   // Inputs
@@ -91,23 +91,23 @@ module iq_prod_tb;
     #10;
     axis_vi0 = 1;
     axis_vq0 = 1;
-    axis_di0 = 16'h1234;
-    axis_dq0 = 16'h5678;
+    axis_di0 = 16'h2001;
+    axis_dq0 = 16'h2001;
     // #10;
     axis_vi1 = 1;
     axis_vq1 = 1;
-    axis_di1 = 16'hABCD;
-    axis_dq1 = 16'hEF01;
+    axis_di1 = 16'h1;
+    axis_dq1 = 16'h1;
     // #10;
     axis_vi2 = 1;
     axis_vq2 = 1;
-    axis_di2 = 16'h4321;
-    axis_dq2 = 16'h8765;
+    axis_di2 = 16'h1;
+    axis_dq2 = 16'h1;
     // #10;
     axis_vi3 = 1;
     axis_vq3 = 1;
-    axis_di3 = 16'hDCBA;
-    axis_dq3 = 16'h9876;
+    axis_di3 = 16'h1;
+    axis_dq3 = 16'h1;
     #10;
     
     // Wait for valid output
