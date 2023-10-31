@@ -1,6 +1,5 @@
 -- TODO width optimizations (reduce inputs from 16 to 14 and process data with full precision), 
 -- arrays instead of signals for reuse
--- instance not like component
 library ieee;
 use ieee.std_logic_1164.all;
 use ieee.numeric_std.all;
@@ -9,7 +8,8 @@ entity iq_prod is
     generic (
         mult_num : natural := 10;
         streams  : natural := 8;
-        bits     : natural := 16
+        bits     : natural := 16;
+        real_bits: natural := 14
 
     );
     port (
@@ -169,17 +169,6 @@ architecture rtl of iq_prod is
     signal m8_d_s   : std_logic_vector(bits*4 - 1 downto 0) := (others => '0');
     signal m9_d_s   : std_logic_vector(bits*4 - 1 downto 0) := (others => '0');
 
-COMPONENT cmpy_0
-PORT (
-  aclk : IN STD_LOGIC;
-  s_axis_a_tvalid : IN STD_LOGIC;
-  s_axis_a_tdata : IN STD_LOGIC_VECTOR(31 DOWNTO 0);
-  s_axis_b_tvalid : IN STD_LOGIC;
-  s_axis_b_tdata : IN STD_LOGIC_VECTOR(31 DOWNTO 0);
-  m_axis_dout_tvalid : OUT STD_LOGIC;
-  m_axis_dout_tdata : OUT STD_LOGIC_VECTOR(63 DOWNTO 0) 
-);
-END COMPONENT;
 begin
     process (aclk)
     begin
@@ -217,7 +206,7 @@ begin
         end if;
     end process;
 
-    m0 : cmpy_0 --2 (imag part = zero)
+    m0 : entity work.cmpy_0 --2 (imag part = zero)
     PORT MAP (
         aclk => aclk,
         s_axis_a_tvalid => '1',
@@ -228,7 +217,7 @@ begin
         m_axis_dout_tdata => m0_d
     );
  
-    m1 : cmpy_0
+    m1 : entity work.cmpy_0
     PORT MAP (
         aclk => aclk,
         s_axis_a_tvalid => '1',
@@ -239,7 +228,7 @@ begin
         m_axis_dout_tdata => m1_d
     );
 
-    m2 : cmpy_0
+    m2 : entity work.cmpy_0
     PORT MAP (
         aclk => aclk,
         s_axis_a_tvalid => '1',
@@ -250,7 +239,7 @@ begin
         m_axis_dout_tdata => m2_d
     );
 
-    m3 : cmpy_0
+    m3 : entity work.cmpy_0
     PORT MAP (
         aclk => aclk,
         s_axis_a_tvalid => '1',
@@ -261,7 +250,7 @@ begin
         m_axis_dout_tdata => m3_d
     );
 
-    m4 : cmpy_0 --10 (imag part = zero)
+    m4 : entity work.cmpy_0 --10 (imag part = zero)
     PORT MAP (
         aclk => aclk,
         s_axis_a_tvalid => '1',
@@ -272,7 +261,7 @@ begin
         m_axis_dout_tdata => m4_d
     );
 
-    m5 : cmpy_0
+    m5 : entity work.cmpy_0
     PORT MAP (
         aclk => aclk,
         s_axis_a_tvalid => '1',
@@ -283,7 +272,7 @@ begin
         m_axis_dout_tdata => m5_d
     );
 
-    m6 : cmpy_0
+    m6 : entity work.cmpy_0
     PORT MAP (
         aclk => aclk,
         s_axis_a_tvalid => '1',
@@ -294,7 +283,7 @@ begin
         m_axis_dout_tdata => m6_d
     );
 
-    m7 : cmpy_0 --16 (imag part = zero)
+    m7 : entity work.cmpy_0 --16 (imag part = zero)
     PORT MAP (
         aclk => aclk,
         s_axis_a_tvalid => '1',
@@ -305,7 +294,7 @@ begin
         m_axis_dout_tdata => m7_d
     );
 
-    m8 : cmpy_0
+    m8 : entity work.cmpy_0
     PORT MAP (
         aclk => aclk,
         s_axis_a_tvalid => '1',
@@ -316,7 +305,7 @@ begin
         m_axis_dout_tdata => m8_d
     );
 
-    m9 : cmpy_0 --20 (imag part = zero)
+    m9 : entity work.cmpy_0 --20 (imag part = zero)
     PORT MAP (
         aclk => aclk,
         s_axis_a_tvalid => '1',
