@@ -30,6 +30,7 @@ set_property target_constrs_file $origin_dir/xdc/$design_name.xdc [current_files
 set obj [get_filesets sources_1]
 set files [glob "${origin_dir}/src/*"]
 add_files -norecurse -fileset $obj $files
+# set_property FILE_TYPE {VHDL 2008} [get_files *.vhd]
 
 set_property source_mgmt_mode All [current_project]
 update_compile_order -fileset sources_1
