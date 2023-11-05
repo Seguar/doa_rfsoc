@@ -1,4 +1,4 @@
-
+`timescale 1ps / 1ps
 module win_avg_tb;
 
   // Parameters

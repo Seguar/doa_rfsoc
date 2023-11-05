@@ -43,20 +43,20 @@ architecture rtl of win_avg is
     return signed(output);
   end function;
 
-  type slv_array is array(natural range <>) of std_logic_vector;
+  -- type slv_array is array(natural range <>) of std_logic_vector;
 
-  function array2slv(arr : slv_array) return std_logic_vector is
-    variable slv           : std_logic_vector((arr'length) * (arr(arr'left)'length) - 1 downto 0);
-    variable cnt           : natural := 0;
-  begin
-    for i in arr'range loop
-      for j in arr(i)'range loop
-        slv(cnt) := arr(i)(j);
-        cnt      := cnt + 1;
-      end loop;
-    end loop;
-    return slv;
-  end function;
+  -- function array2slv(arr : slv_array) return std_logic_vector is
+  --   variable slv           : std_logic_vector((arr'length) * (arr(arr'left)'length) - 1 downto 0);
+  --   variable cnt           : natural := 0;
+  -- begin
+  --   for i in arr'range loop
+  --     for j in arr(i)'range loop
+  --       slv(cnt) := arr(i)(j);
+  --       cnt      := cnt + 1;
+  --     end loop;
+  --   end loop;
+  --   return slv;
+  -- end function;
 
   type iq_data_t is record
     real : signed(bits - 1 downto 0);
@@ -145,24 +145,21 @@ begin
       if cnt = cnt_lim then
         axis_vo_s <= '1';
         cnt       <= 0;
-        -- cnt_lim  <= to_integer(x"01" sll to_integer(win_len_s)); -- Maybe this style 
+        -- cnt_lim  <= to_integer(x"01" sll to_integer(win_len_s)); -- TODO: Maybe this style 
         cnt_lim   <= 2 ** to_integer(win_len);
         win_len_s <= win_len;
       else
         axis_vo_s <= '0';
         cnt       <= cnt + 1;
       end if;
-      --div
-      --acc
-      --cnt
     end if;
   end process;
   axis_vo <= axis_vo_s;
   -- TODO convertion function
   -- axis_do <= array2slv(iq_data_acc_s);
-  axis_out : for i in 0 to (streams - 1) generate
-    axis_do(bits + i * bits - 1 downto i * bits)             <= std_logic_vector(iq_data_out_s(i).real(bits * 2 - 1 downto bits));
-    axis_do(bits + (i + 1) * bits - 1 downto (i + 1) * bits) <= std_logic_vector(iq_data_out_s(i).imag(bits * 2 - 1 downto bits));
+  axis_out : for i in 0 to (streams - 1) generate -- Cut and pack
+    axis_do((i * 2 + 1) * bits - 1 downto (i * 2) * bits)     <= std_logic_vector(iq_data_out_s(i).real(bits * 2 - 1 downto bits));
+    axis_do((i * 2 + 2) * bits - 1 downto (i * 2 + 1) * bits) <= std_logic_vector(iq_data_out_s(i).imag(bits * 2 - 1 downto bits));
   end generate;
   axis_ri <= axis_ro;
 end architecture;
