@@ -47,35 +47,13 @@ architecture rtl of win_avg is
     return signed(output);
   end function;
 
-  -- type slv_array is array(natural range <>) of std_logic_vector;
-
-  -- function array2slv(arr : slv_array) return std_logic_vector is
-  --   variable slv           : std_logic_vector((arr'length) * (arr(arr'left)'length) - 1 downto 0);
-  --   variable cnt           : natural := 0;
-  -- begin
-  --   for i in arr'range loop
-  --     for j in arr(i)'range loop
-  --       slv(cnt) := arr(i)(j);
-  --       cnt      := cnt + 1;
-  --     end loop;
-  --   end loop;
-  --   return slv;
-  -- end function;
-
-  type iq_data_t is record
-    real : signed(bits - 1 downto 0);
-    imag : signed(bits - 1 downto 0);
-  end record iq_data_t;
-
   type iq_data_ext_t is record
     real : signed(bits * 2 - 1 downto 0);
     imag : signed(bits * 2 - 1 downto 0);
   end record iq_data_ext_t;
 
-  type iq_data_arr_t is array (natural range <>) of iq_data_t;
   type iq_data_arr_ext_t is array (natural range <>) of iq_data_ext_t;
 
-  constant EMPTY_IQ_DATA     : iq_data_t     := ((others => '0'), (others => '0'));
   constant EMPTY_IQ_DATA_EXT : iq_data_ext_t := ((others => '0'), (others => '0'));
 
   -- Arrays
@@ -96,11 +74,6 @@ begin
   process (aclk)
   begin
     if rising_edge(aclk) then
-
-      --   if len_flag = '1' then
-      --     len_flag <= '0';
-      --     cnt_lim  <= to_integer(unsigned(x"01" sll to_integer(unsigned(win_len))));
-      --   end if;
       -- TODO rewrite this:
       iq_data_i_s(0).real(bits * 2 - 1 downto bits) <= signed(axis_di(bits - 1 downto 0));
       iq_data_i_s(1).real(bits * 2 - 1 downto bits) <= signed(axis_di(bits * 2 - 1 downto bits));
