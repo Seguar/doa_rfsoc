@@ -4,17 +4,37 @@ module win_avg_tb;
   // Parameters
   localparam  numbers = 10;
   localparam  streams = 16;
-  localparam  bits = 32;
+  localparam  bits = 2;
 
   //Ports
-  reg  aclk;
-  reg [4 : 0] win_len;
-  reg [bits * streams - 1 : 0] axis_di;
-  reg  axis_vi;
+  logic  aclk;
+  logic [bits-1:0] m0r = -1;
+  logic [bits-1:0] m1r = 1;
+  logic [bits-1:0] m2r = 1;
+  logic [bits-1:0] m3r = 1;
+  logic [bits-1:0] m4r = 1;
+  logic [bits-1:0] m5r = 1;
+  logic [bits-1:0] m6r = 1;
+  logic [bits-1:0] m7r = 1;
+  logic [bits-1:0] m8r = 1;
+  logic [bits-1:0] m9r = 1;
+  logic [bits-1:0] m0i = 1;
+  logic [bits-1:0] m1i = 1;
+  logic [bits-1:0] m2i = 1;
+  logic [bits-1:0] m3i = 1;
+  logic [bits-1:0] m4i = 1;
+  logic [bits-1:0] m5i = 1;
+  logic [bits-1:0] m6i = 1;
+  logic [bits-1:0] m7i = 1;
+  logic [bits-1:0] m8i = 1;
+  logic [bits-1:0] m9i = 1;
+  logic [4 : 0] win_len;
+  logic [bits * streams - 1 : 0] axis_di;
+  logic  axis_vi;
   logic  axis_ri;
   logic [bits * streams * 2 - 1 : 0] axis_do;
   logic  axis_vo;
-  reg  axis_ro;
+  logic  axis_ro;
 
   win_avg # (
     .numbers(numbers),
@@ -35,9 +55,9 @@ module win_avg_tb;
 always #5  aclk = ! aclk ;
 
 initial begin
-    // aclk = 0;
-    // win_len = 5;
-    // axis_di = 32'h00000001;
+    aclk = 0;
+    win_len = 1;
+    axis_di = {m9r, m8i, m8r, m7r, m6i, m6r, m5i, m5r, m4r, m3i, m3r, m2i, m2r, m1i, m1r, m0r};
     // axis_vi = 1;
     // axis_ro = 0;
 
@@ -53,10 +73,10 @@ initial begin
       #1;
     end
     
-    // Print the output
-    $display("axis_do = %h", axis_do);
+    // // Print the output
+    // $display("axis_do = %h", axis_do);
     
-    // End the simulation
-    $finish;
+    // // End the simulation
+    // $finish;
   end
 endmodule

@@ -127,6 +127,7 @@ begin
         -- cnt_lim  <= to_integer(x"01" sll to_integer(win_len_s)); -- TODO: Maybe this style 
         cnt_lim   <= 2 ** to_integer(win_len);
         win_len_s <= win_len;
+        iq_data_acc_s <= (others => EMPTY_IQ_DATA_EXT);
       else
         axis_vo_s <= '0';
         axis_ko_s <= (others => '1'); -- May be zeros
