@@ -99,7 +99,8 @@ class doaMtsOverlay(Overlay):
         
         # ADC Capture Memories
         self.adc_capture = self.memdict_to_view("URAM_capture/axi_bram_ctrl_0")
-        self.adc_prod = self.memdict_to_view("URAM_prod/axi_bram_ctrl_0")
+        self.adc_prod = self.memdict_to_view("URAM_prod/axi_bram_ctrl_0").view(np.int32)
+        self.adc_fifo = self.memdict_to_view("fifo_mat/axi_bram_ctrl_0").view(np.int32)
 
         # Reset GPIOs and bring to known state
         self.dac_enable.off()
@@ -140,18 +141,25 @@ class doaMtsOverlay(Overlay):
         self.trig_cap.off()
 
     def internal_capture(self, buffer):
-        """ Captures ADC samples from three channels and stores to internal memories """
+        """ Captures ADC samples from 4 channels and stores to internal memories """
         if not np.issubdtype(buffer.dtype, np.int16):
             raise Exception("buffer not defined or np.int16!")
         self.trigger_capture()
         buffer[0] = np.copy(self.adc_capture[0:len(buffer[0])])
 
     def prod_capture(self, buffer):
-        """ Captures ADC samples from three channels and stores to internal memories """
-        if not np.issubdtype(buffer.dtype, np.int16):
-            raise Exception("buffer not defined or np.int16!")
+        """ Captures samples from IQ prod and stores to internal memories """
+        # if not np.issubdtype(buffer.dtype, np.int64):
+        #     raise Exception("buffer not defined or np.int64!")
         # self.trigger_capture()
         buffer[0] = np.copy(self.adc_prod[0:len(buffer[0])])
+
+    def fifo_capture(self, buffer):
+        """ Captures samples from IQ prod, avg and stores to internal memories """
+        # if not np.issubdtype(buffer.dtype, np.int64):
+        #     raise Exception("buffer not defined or np.int64!")
+        # self.trigger_capture()
+        buffer[0] = np.copy(self.adc_fifo[0:len(buffer[0])])
 
     def mts_sync(self, adcTarget=-1, mixer_phase1=0.0, mixer_phase2=0.0, mixer_phase3=0.0, mixer_phase4=0.0):
         """
