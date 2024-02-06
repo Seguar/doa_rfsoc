@@ -98,7 +98,7 @@ try:
         data_binary = struct.pack('h' * data_size, *data)
 
         # Send the data
-        client_socket.sendall(data_binary)
+        %%.sendall(data_binary)
 
 except OSError as err:
     oled.write("Error {}".format(err))
