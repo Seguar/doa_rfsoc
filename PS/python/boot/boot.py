@@ -41,26 +41,26 @@ ps_btn = GPIO(357, 'in') #  GPIO.get_gpio_base() + pin num
 
 o1 = doaMtsOverlay('doa_mts.bit')
 
-o1.dac_enable.on()
-from scipy.signal import chirp
-from scipy.signal import sawtooth
-from scipy.signal import gausspulse
+# o1.dac_enable.on()
+# from scipy.signal import chirp
+# from scipy.signal import sawtooth
+# from scipy.signal import gausspulse
 
-DAC_SR = 10.0E9  # Sample rate of DACs and ADCs is 4.0 GHz
-ADC_SR = 10.0E9
-Fc = 500.0E6 # Set center frequency of waveform to 250.0 MHz
-Fe = 500.0E6 # maximum frequency of chirp at end of record
-DAC_Amplitude = 16383.0  # 14bit DAC +16383/-16384
-X_axis = (1/DAC_SR) * np.arange(0,o1.dac1_player.shape[0])
-# generate some basic waveforms
-DAC_sinewave = DAC_Amplitude * np.sin(2*np.pi*Fc*X_axis)
-DAC_sawtooth = DAC_Amplitude * sawtooth(2 * np.pi * Fc * X_axis)
-DAC_chirp = DAC_Amplitude * chirp(np.arange(0, o1.dac1_player.shape[0])/DAC_SR,
-                                  f0=Fc, f1=Fe, t1=(o1.dac1_player.shape[0]/DAC_SR), 
-                                  phi=0.0, method='linear')
+# DAC_SR = 10.0E9  # Sample rate of DACs and ADCs is 4.0 GHz
+# ADC_SR = 10.0E9
+# Fc = 500.0E6 # Set center frequency of waveform to 250.0 MHz
+# Fe = 500.0E6 # maximum frequency of chirp at end of record
+# DAC_Amplitude = 16383.0  # 14bit DAC +16383/-16384
+# X_axis = (1/DAC_SR) * np.arange(0,o1.dac1_player.shape[0])
+# # generate some basic waveforms
+# DAC_sinewave = DAC_Amplitude * np.sin(2*np.pi*Fc*X_axis)
+# DAC_sawtooth = DAC_Amplitude * sawtooth(2 * np.pi * Fc * X_axis)
+# DAC_chirp = DAC_Amplitude * chirp(np.arange(0, o1.dac1_player.shape[0])/DAC_SR,
+#                                   f0=Fc, f1=Fe, t1=(o1.dac1_player.shape[0]/DAC_SR), 
+#                                   phi=0.0, method='linear')
 
-o1.dac0_player[:] = np.int16(DAC_sinewave)
-o1.dac1_player[:] = np.int16(DAC_sinewave)
+# o1.dac0_player[:] = np.int16(DAC_sinewave)
+# o1.dac1_player[:] = np.int16(DAC_sinewave)
 
 
 iface = ni.gateways()['default'][ni.AF_INET][1]
@@ -77,31 +77,29 @@ server_socket.setsockopt(socket.SOL_SOCKET, socket.SO_REUSEADDR, 1)
 server_socket.bind((server_ip, server_port))
 oled.write("TCP/IP server on")
 
-try:
-    while True:
-        if (ps_btn.read()):
-            oled.write("PS_BTN")
-            client_socket.close()
-            server_socket.close()
-
-        server_socket.listen(1)
-
-        # Accept a connection from the client
-        client_socket, client_address = server_socket.accept()        
-        # Receive and unpack the data size (number of Int16 elements) as a 16-bit integer
-        data_size = struct.unpack('Q', client_socket.recv(64))[0]
+server_socket.listen(1)
+client_socket, client_address = server_socket.accept()
+data_size = struct.unpack('Q', client_socket.recv(64))[0]
+while True:
+    if (ps_btn.read()):
+        oled.write("PS_BTN")
+        client_socket.close()
+        server_socket.close()
+    try:
         # Get data from ADCs
         data = o1.get_custom_data(data_size)
-        # o1.dac0_player[:] = np.shape(data)
-        # o1.dac1_player[:] = np.shape(data)
         # Pack the data as binary
         data_binary = struct.pack('h' * data_size, *data)
-
         # Send the data
-        %%.sendall(data_binary)
-
-except OSError as err:
-    oled.write("Error {}".format(err))
-    client_socket.close()
-    server_socket.close()
+        client_socket.sendall(data_binary)
+        PS_BTN_RST = ps_btn.read()
+    except BrokenPipeError:
+        server_socket.listen(1)
+        # Accept a connection from the client
+        client_socket, client_address = server_socket.accept()
+        oled.write("New connection (BrokenPipeError):")
+        # print(client_address)
+        continue
+    except ConnectionResetError:
+        server_socket.listen
 
