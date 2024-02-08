@@ -79,27 +79,20 @@ oled.write("TCP/IP server on")
 
 server_socket.listen(1)
 client_socket, client_address = server_socket.accept()
-data_size = struct.unpack('Q', client_socket.recv(64))[0]
+oled.write("Connected")
 while True:
-    if (ps_btn.read()):
-        oled.write("PS_BTN")
-        client_socket.close()
-        server_socket.close()
-    try:
-        # Get data from ADCs
-        data = o1.get_custom_data(data_size)
-        # Pack the data as binary
-        data_binary = struct.pack('h' * data_size, *data)
-        # Send the data
-        client_socket.sendall(data_binary)
-        PS_BTN_RST = ps_btn.read()
-    except BrokenPipeError:
-        server_socket.listen(1)
-        # Accept a connection from the client
-        client_socket, client_address = server_socket.accept()
-        oled.write("New connection (BrokenPipeError):")
-        # print(client_address)
-        continue
-    except ConnectionResetError:
-        server_socket.listen
+    data = client_socket.recv(64)
+    if data:
+        data_size = struct.unpack('Q', data)[0]
+        print(data_size)     
+    while True:    
+        try:
+            data = o1.get_custom_data(data_size)
+            data_binary = struct.pack('h' * data_size, *data)
+            client_socket.sendall(data_binary)
+        except:
+            server_socket.listen(1)
+            client_socket, client_address = server_socket.accept()
+            oled.write("New connection")
+            break
 
