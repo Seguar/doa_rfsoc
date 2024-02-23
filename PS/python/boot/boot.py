@@ -84,7 +84,7 @@ while True:
     data = client_socket.recv(64)
     if data:
         data_size = struct.unpack('Q', data)[0]
-        print(data_size)     
+        oled.write("Data Size:\n{}".format(data_size))   
     while True:    
         try:
             data = o1.get_custom_data(data_size)
