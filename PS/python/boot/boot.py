@@ -63,8 +63,15 @@ o1 = doaMtsOverlay('doa_mts.bit')
 # o1.dac1_player[:] = np.int16(DAC_sinewave)
 
 
-iface = ni.gateways()['default'][ni.AF_INET][1]
-ip_address = ni.ifaddresses(iface)[2][0]['addr']
+try:
+    iface = ni.gateways()['default'][ni.AF_INET][1]
+    ip_address = ni.ifaddresses(iface)[2][0]['addr']    
+except:
+    if ('usb0' in ni.interfaces()) and (len(ni.ifaddresses('usb0')) == 3):
+        iface = 'usb0'
+        ip_address = ni.ifaddresses('usb0')[2][0]['addr']
+    else:
+        oled.write("RFSoC-PYNQ\nNo IP detected")
 oled.write("IP Addr({}):\n{}".format(iface, ip_address))
 
 server_ip = ip_address  # Use the appropriate IP address or hostname
@@ -75,11 +82,11 @@ server_socket = socket.socket(socket.AF_INET, socket.SOCK_STREAM)
 # Bind the socket to the server IP and port
 server_socket.setsockopt(socket.SOL_SOCKET, socket.SO_REUSEADDR, 1)
 server_socket.bind((server_ip, server_port))
-oled.write("TCP/IP server on")
+oled.write("TCP/IP server on\nIP Addr({}):{}".format(iface, ip_address))
 
 server_socket.listen(1)
 client_socket, client_address = server_socket.accept()
-oled.write("Connected")
+oled.write("Connected via {} to {}".format(iface, client_address))
 while True:
     data = client_socket.recv(64)
     if data:
@@ -93,6 +100,6 @@ while True:
         except:
             server_socket.listen(1)
             client_socket, client_address = server_socket.accept()
-            oled.write("New connection")
+            oled.write("New connection via {} to {}").format(iface, client_address)
             break
 
