@@ -82,11 +82,11 @@ server_socket = socket.socket(socket.AF_INET, socket.SOCK_STREAM)
 # Bind the socket to the server IP and port
 server_socket.setsockopt(socket.SOL_SOCKET, socket.SO_REUSEADDR, 1)
 server_socket.bind((server_ip, server_port))
-oled.write("TCP/IP server on\nIP Addr({}):{}".format(iface, ip_address))
+oled.write("TCP/IP server on\n Interface({})".format(iface))
 
 server_socket.listen(1)
 client_socket, client_address = server_socket.accept()
-oled.write("Connected via {} to {}".format(iface, client_address))
+oled.write("Connected")
 while True:
     data = client_socket.recv(64)
     if data:
@@ -100,6 +100,6 @@ while True:
         except:
             server_socket.listen(1)
             client_socket, client_address = server_socket.accept()
-            oled.write("New connection via {} to {}").format(iface, client_address)
+            oled.write("New connection")
             break
 
