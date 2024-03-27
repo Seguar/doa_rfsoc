@@ -7,6 +7,13 @@ import time
 import os
 import subprocess
 
+from pynq import GPIO
+from rfsoc4x2 import oled
+import subprocess as sp
+import netifaces as ni
+import socket
+import struct
+
 MODULE_PATH = os.path.dirname(os.path.realpath(__file__))
 CLOCKWIZARD_LOCK_ADDRESS = 0x0004
 CLOCKWIZARD_RESET_ADDRESS = 0x0000
@@ -22,6 +29,15 @@ RFSOC4X2_LMX_FREQ = 500.0
 RFSOC4X2_DAC_TILES = 0b0101
 RFSOC4X2_ADC_TILES = 0b0101
 
+NYQUIST_ZONE = 2
+CENTRE_FREQ = 5700
+DATASTREAM = 1
+CHANNELS = 8
+DATA_SIZE = (2**14)*CHANNELS
+splitSym = "#"
+PHASES = [-24, -64.5, 132.88, 179.67]
+
+oled = oled.oled_display()
 class doaMtsOverlay(Overlay):
     """
     The MTS overlay demonstrates the RFSoC multi-tile synchronization capability that enables
@@ -56,10 +72,18 @@ class doaMtsOverlay(Overlay):
         # xrfclk.set_ref_clks(lmk_freq = RFSOC4X2_LMK_FREQ, lmx_freq = RFSOC4X2_LMX_FREQ)
         self.ACTIVE_DAC_TILES = RFSOC4X2_DAC_TILES
         self.ACTIVE_ADC_TILES = RFSOC4X2_ADC_TILES
+        self.centre_freq = CENTRE_FREQ
+        self.nyquist_zone = NYQUIST_ZONE
+        self.dataStream = DATASTREAM
+        self.channels = CHANNELS
+        self.data_size = DATA_SIZE
+        self.phases = PHASES
 
         self.init_rf_clks()
         time.sleep(0.5)
         super().__init__(resolve_binary_path(bitfile_name), **kwargs)
+        
+
         
         self.xrfdc = self.usp_rf_data_converter_1       
         self.xrfdc.mts_dac_config.RefTile = DAC_REF_TILE  # DAC tile distributing reference clock
@@ -105,8 +129,8 @@ class doaMtsOverlay(Overlay):
         self.trig_cap.off() 
 
         # self.mts_sync(adcTarget = -1, mixer_phase1=-96, mixer_phase2=-96, mixer_phase3=92, mixer_phase4=100)
-        self.mts_sync(mixer_phase1=-24, mixer_phase2=-64.5, mixer_phase3=132.88, mixer_phase4=179.67)
-        self.mts_sync(mixer_phase1=-24, mixer_phase2=-64.5, mixer_phase3=132.88, mixer_phase4=179.67)
+        self.mts_sync()
+        self.mts_sync()
 
 
     def init_rf_clks(self, lmk_freq=RFSOC4X2_LMK_FREQ, lmx_freq=RFSOC4X2_LMX_FREQ):
@@ -132,11 +156,10 @@ class doaMtsOverlay(Overlay):
         if (Xstatus != 1):
             raise Exception("The MTS ClockTree has failed to LOCK. Please verify board clocking configuration")
 
-
     def trigger_capture(self):
         """ Internal loopback of DAC waveform to internal capture mirror"""        
         self.trig_cap.off()
-        self.trig_cap.on() # actually triggers adc[A..C] to capture too
+        self.trig_cap.on() # actually triggers adc[A..D] to capture too
         self.trig_cap.off()
 
     def internal_capture(self, buffer):
@@ -146,7 +169,7 @@ class doaMtsOverlay(Overlay):
         self.trigger_capture()
         buffer[0] = np.copy(self.adc_capture[0:len(buffer[0])])
 
-    def mts_sync(self, adcTarget=-1, mixer_phase1=0.0, mixer_phase2=0.0, mixer_phase3=0.0, mixer_phase4=0.0):
+    def mts_sync(self, adcTarget=-1):
         """
         MTS
         """
@@ -167,7 +190,7 @@ class doaMtsOverlay(Overlay):
 
         self.configure_adc_tiles(0)
         self.configure_adc_tiles(2)
-        self.configure_adcs(mixer_phase1=mixer_phase1, mixer_phase2=mixer_phase2, mixer_phase3=mixer_phase3, mixer_phase4=mixer_phase4)
+        self.configure_adcs()
         # time.sleep(1)
         # self.xrfdc.mts_adc_config.SysRef_Enable = 0
     def configure_adc_tiles(self, tile_num, pll_freq=500.00, sample_freq=5000.00):
@@ -183,7 +206,7 @@ class doaMtsOverlay(Overlay):
             # self.adc_tiles[tile_num].SetupFIFO(True)
 
 
-    def configure_adc(self, dev_num, nyquist_zone=2, centre_freq=0, event_src=xrfdc.EVNT_SRC_SYSREF, mixer_phase=0.0):
+    def configure_adc(self, dev_num, nyquist_zone=NYQUIST_ZONE, centre_freq=CENTRE_FREQ, event_src=xrfdc.EVNT_SRC_SYSREF, mixer_phase=0.0):
             """
             Single ADC tune
             """         
@@ -214,14 +237,14 @@ class doaMtsOverlay(Overlay):
                 self.adc[dev_num].UpdateEvent(xrfdc.EVENT_CRSE_DLY)
                 self.adc[dev_num].UpdateEvent(xrfdc.EVENT_QMC)
             
-    def configure_adcs(self, nyquist_zone=2, centre_freq=5700, event_src=xrfdc.EVNT_SRC_SYSREF, mixer_phase1=0.0, mixer_phase2=0.0, mixer_phase3=0.0, mixer_phase4=0.0):
+    def configure_adcs(self, nyquist_zone=NYQUIST_ZONE, centre_freq=CENTRE_FREQ, event_src=xrfdc.EVNT_SRC_SYSREF, mixer_phase1=PHASES[0], mixer_phase2=PHASES[1], mixer_phase3=PHASES[2], mixer_phase4=PHASES[3]):
             """
             All ADCs tune
             """
-            self.configure_adc(0, nyquist_zone, centre_freq, event_src, mixer_phase1)
-            self.configure_adc(1, nyquist_zone, centre_freq, event_src, mixer_phase2)
-            self.configure_adc(2, nyquist_zone, centre_freq, event_src, mixer_phase3)
-            self.configure_adc(3, nyquist_zone, centre_freq, event_src, mixer_phase4)
+            self.configure_adc(0, self.nyquist_zone, self.centre_freq, event_src, self.phases[0])
+            self.configure_adc(1, self.nyquist_zone, self.centre_freq, event_src, self.phases[1])
+            self.configure_adc(2, self.nyquist_zone, self.centre_freq, event_src, self.phases[2])
+            self.configure_adc(3, self.nyquist_zone, self.centre_freq, event_src, self.phases[3])
 
     def configure_dac(self, tile_num, dev_num, pll_freq=500.00, sample_freq=5000.00, nyquist_zone=2, centre_freq=0):
         """
@@ -255,11 +278,130 @@ class doaMtsOverlay(Overlay):
         """
         Data from 4 (I + Q) channels, int16
         """
-        AlignedCaptureSamples = np.zeros((1,data_size),dtype=np.int16)
+        AlignedCaptureSamples = np.zeros((1,len(self.adc_capture)),dtype=np.int16)
         self.internal_capture(AlignedCaptureSamples)
-        custom_data = AlignedCaptureSamples[0]
+        custom_data = AlignedCaptureSamples[0][:self.data_size]
         return custom_data
+    
+    def handle_client_connection(self, client_socket):
+        while True:
+            # Receive data from client until terminator is found
+            data = b''
+            while True:
+                chunk = client_socket.recv(1)  # Receive one byte at a time
+                if chunk == b'\r' or chunk == b'\n':  # ASCII CR or LF character
+                    break
+                data += chunk
+
+            if not data:
+                break
+
+            message = data.decode('utf-8')
+            return message
         
+    def handle_commands(self, commandList):
+        for command_str in commandList:
+            command, var = command_str.split()
+            var = var.split('/')
+            var = list(map(int, var))
+            match command:
+                case "fc":
+                    self.centre_freq = var[0]
+                    self.nyquist_zone = var[1]
+                    self.configure_adcs()
+                case "cal":
+                    self.channels = var[0]
+                    self.calibrate()
+                case "phase":
+                    self.phases = var
+                    self.mts_sync()
+                case "dataChan":
+                    self.data_size = var[0]
+                    oled.write("Data Size:\n{}".format(self.data_size))
+                    # 
+                case "dataStream":              
+                    self.dataStream = var[0]
+                case _:
+                    oled.write("Wrong command:\n{}".format(command))
+                    
+    def cphase(self, rawData):
+        # Calibrates phases using FFT phase estimation
+        # Takes the maximum of the abs value of the FFT of the signal
+        # and calculates its angle, then calculates the right phase shift
+        # with respect to the first rawData vector.
+
+        # INPUTS:
+        # rawData: 4 X n raw signal matrix
+
+        # OUTPUTS:
+        # fixed_rawData: 4 X n aligned signal matrix
+        # weights: 4 X 1 weights vector for phase alignment
+
+        max_val = np.zeros(4, dtype=np.cdouble)
+        rawFt = np.zeros(len(rawData[:,1]), dtype=np.cdouble)
+        angs = np.zeros(4, dtype=int)
+        max_idx = np.zeros(4, dtype=int)
+        for i in range(4):
+            rawFt = np.fft.fftshift(np.fft.fft(rawData[i, :]))
+            max_idx[i] = np.argmax(np.abs(rawFt))
+            max_val[i] = rawFt[max_idx[i]]
+        angs = np.angle(max_val)
+        cal_angs = angs[0] - angs
+
+        weights = np.exp(1j * cal_angs)
+
+        return weights
+    
+    def calibrate(self, channels=CHANNELS):
+        coefs_i = [-90, -90, 90, 90]
+        self.phases = coefs_i
+        self.mts_sync()
+        self.mts_sync()
+
+        N = len(self.adc_capture) // self.channels
+
+        # Data acq from FPGA
+        AlignedCaptureSamples = np.zeros((1,len(self.adc_capture)),dtype=np.int16)
+        self.internal_capture(AlignedCaptureSamples)
+
+        ShapedCaptureSamples = np.zeros((channels, N), dtype=np.int16)
+        for i in range(self.channels):
+            ShapedCaptureSamples[i] = AlignedCaptureSamples[0][i::self.channels]
+
+        iqData = np.zeros((4, N), dtype=np.cdouble)
+        idx = 0
+        for i in range(0, self.channels, 2):
+            iqData[idx] = np.conjugate(ShapedCaptureSamples[i] - 1j * ShapedCaptureSamples[i+1])
+            idx = idx + 1
+        np.angle(self.cphase(iqData), deg=True)
+        coefs = np.zeros((4, 1), dtype=np.double)
+        coefs = np.angle(self.cphase(iqData), deg=True)
+
+        coefs_new = coefs_i + coefs
+        coefs_new = np.clip(coefs_new, -179, 179)
+        self.phases = coefs_new
+        self.mts_sync()
+        self.mts_sync()
+
+        # Data acq from FPGA
+        AlignedCaptureSamples = np.zeros((1,len(self.adc_capture)),dtype=np.int16)
+        self.internal_capture(AlignedCaptureSamples)
+
+        ShapedCaptureSamples = np.zeros((self.channels, N), dtype=np.int16)
+        for i in range(self.channels):
+            ShapedCaptureSamples[i] = AlignedCaptureSamples[0][i::self.channels]
+
+        iqData = np.zeros((4, N), dtype=np.cdouble)
+        idx = 0
+        for i in range(0, self.channels, 2):
+            iqData[idx] = np.conjugate(ShapedCaptureSamples[i] - 1j * ShapedCaptureSamples[i+1])
+            idx = idx + 1
+
+        coefs = np.zeros((4, 1), dtype=np.double)
+        coefs = np.angle(self.cphase(iqData), deg=True)
+        oled.write('Ph:{}'.format(np.round(coefs_new, 1)))
+        
+ # -------------------------------------------------------------------------------------------------       
 def resolve_binary_path(bitfile_name):
     """ this helper function is necessary to locate the bit file during overlay loading"""
     if os.path.isfile(bitfile_name):

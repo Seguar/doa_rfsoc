@@ -5,7 +5,6 @@
 from time import sleep
 from pynq.overlays.base import BaseOverlay
 from pynq import GPIO
-from rfsoc4x2 import oled
 import pynq
 import subprocess as sp
 import netifaces as ni
@@ -14,7 +13,6 @@ import struct
 import numpy as np
 from doa_mts import *
 
-oled = oled.oled_display()
 oled.write("RFSoC-PYNQ\nVersion {}".format(pynq.__version__))
 
 # LMK clock config
