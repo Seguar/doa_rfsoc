@@ -29,15 +29,20 @@ RFSOC4X2_LMX_FREQ = 500.0
 RFSOC4X2_DAC_TILES = 0b0101
 RFSOC4X2_ADC_TILES = 0b0101
 
-NYQUIST_ZONE = 2
-CENTRE_FREQ = 5700
-DATASTREAM = 1
+DATASTREAM = 1 #TODO implement data stream
 CHANNELS = 8
 DATA_SIZE = (2**14)*CHANNELS
-splitSym = "#"
+splitSym = "#" # For parsing commands
+EVENT_SRC = xrfdc.EVNT_SRC_SYSREF # For MTS
+
+NYQUIST_ZONE = 2
+CENTRE_FREQ = 5700
 PHASES = [-24, -64.5, 132.88, 179.67]
 D_PHASES = [0, 0, 0, 0]
-EVENT_SRC = xrfdc.EVNT_SRC_SYSREF
+D_NYQUIST_ZONE = [2, 2, 2, 2]
+D_CENTRE_FREQ = [5700, 5700, 5700, 5700]
+
+DA = "all" # "all" DACs = ADCs params, "dac" DACs = DACs only, "none" DACs =/= ADCs TODO implement
 
 oled = oled.oled_display()
 class doaMtsOverlay(Overlay):
@@ -74,21 +79,26 @@ class doaMtsOverlay(Overlay):
         # xrfclk.set_ref_clks(lmk_freq = RFSOC4X2_LMK_FREQ, lmx_freq = RFSOC4X2_LMX_FREQ)
         self.ACTIVE_DAC_TILES = RFSOC4X2_DAC_TILES
         self.ACTIVE_ADC_TILES = RFSOC4X2_ADC_TILES
-        
-        self.centre_freq = CENTRE_FREQ
-        self.nyquist_zone = NYQUIST_ZONE
-        self.dataStream = DATASTREAM
+
         self.channels = CHANNELS
         self.data_size = DATA_SIZE
+        self.dataStream = DATASTREAM
+        self.event_src = EVENT_SRC 
+        # ADC parameters
         self.phases = PHASES
+        self.centre_freq = CENTRE_FREQ
+        self.nyquist_zone = NYQUIST_ZONE
+        # DAC parameters
         self.d_phases = D_PHASES
-        self.event_src = EVENT_SRC
+        self.d_centre_freq = D_CENTRE_FREQ
+        self.d_nyquist_zone = D_NYQUIST_ZONE    
+
+        self.da = DA
+        self.dac_signal = [np.zeros(len(self.dac0_player), dtype=np.int16), 0, np.zeros(len(self.dac1_player), dtype=np.int16), 0]    
     
         self.init_rf_clks()
         time.sleep(0.5)
-        super().__init__(resolve_binary_path(bitfile_name), **kwargs)
-        
-
+        super().__init__(resolve_binary_path(bitfile_name), **kwargs)  
         
         self.xrfdc = self.usp_rf_data_converter_1       
         self.xrfdc.mts_dac_config.RefTile = DAC_REF_TILE  # DAC tile distributing reference clock
@@ -96,8 +106,7 @@ class doaMtsOverlay(Overlay):
         
         self.adc_tiles = {}
         self.adc = {}
-        bitvector = self.ACTIVE_ADC_TILES
-        
+        bitvector = self.ACTIVE_ADC_TILES        
         for n in range(MAX_ADC_TILES):
             if (bitvector & 0x1):
                 self.adc_tiles[n] = self.xrfdc.adc_tiles[n]
@@ -108,15 +117,11 @@ class doaMtsOverlay(Overlay):
         self.dac_tiles = {}
         self.dac = {}
         bitvector = self.ACTIVE_DAC_TILES
-
         for n in range(MAX_DAC_TILES):
             if (bitvector & 0x1):
                 self.dac_tiles[n] = self.xrfdc.dac_tiles[n]
                 self.dac[n] = self.dac_tiles[n].blocks[0]
             bitvector = bitvector >> 1
-
-        # self.configure_adcs()
-        # self.configure_dacs()
 
         # map PL GPIO registers
         self.dac0_enable =  self.control.gpio_control.axi_gpio_dac0.channel1[0]
@@ -135,7 +140,7 @@ class doaMtsOverlay(Overlay):
         self.dac1_enable.off()
         self.trig_cap.off() 
 
-        # self.mts_sync(adcTarget = -1, mixer_phase1=-96, mixer_phase2=-96, mixer_phase3=92, mixer_phase4=100)
+        # MTS power up sequence
         self.dac0_enable.on()
         self.dac1_enable.on()
         self.trig_cap.off() 
@@ -143,7 +148,6 @@ class doaMtsOverlay(Overlay):
         self.mts_sync()
         self.trig_cap.on() 
         self.trig_cap.off() 
-
 
     def init_rf_clks(self, lmk_freq=RFSOC4X2_LMK_FREQ, lmx_freq=RFSOC4X2_LMX_FREQ):
         """Initialise the LMK and LMX clocks for the radio hierarchy.
@@ -368,13 +372,18 @@ class doaMtsOverlay(Overlay):
                 case "fc":
                     self.centre_freq = var[0]
                     self.nyquist_zone = var[1]
+                    self.d_centre_freq = [var[2], var[2], var[4], var[4]]
+                    self.d_nyquist_zone = [var[3], var[3], var[5], var[5]]
                     self.configure_dacs()
                     self.configure_adcs()
-                case "cal":
+                case "cal": # Only for ADCs
                     self.channels = var[0]
                     self.calibrate()
                 case "phase":
                     self.phases = var
+                    self.mts_sync()
+                case "dphase":
+                    self.d_phases = var
                     self.mts_sync()
                 case "dataChan":
                     self.data_size = var[0]
@@ -382,8 +391,38 @@ class doaMtsOverlay(Overlay):
                     # 
                 case "dataStream":              
                     self.dataStream = var[0]
+                case "da":
+                    self.da = var[0]
+                    match self.da
+                        case "all": # DACs = ADCs params
+                            self.d_centre_freq[:] = self.centre_freq
+                            self.d_nyquist_zone[:] = self.nyquist_zone
+                            self.dac0_enable.on()
+                            self.dac1_enable.on()
+                            self.trig_cap.off() 
+                            self.mts_sync()
+                            self.trig_cap.on() 
+                            self.trig_cap.off() 
+                        case "dac": # DACs = DACs only
+                            self.d_centre_freq[:] = self.d_centre_freq[0]
+                            self.d_nyquist_zone[:] = self.d_nyquist_zone[0]
+                            self.dac0_enable.on()
+                            self.dac1_enable.on()
+                            self.trig_cap.off() 
+                            self.mts_sync()
+                            self.trig_cap.on() 
+                            self.trig_cap.off() 
+                        case "none": # DACs =/= ADCs
+                            self.configure_dacs()
+                            self.configure_adcs()
+                case "dac0":
+                    self.dac_signal[0] = var
+                    dac_data_mem_write(self.dac_signal[0], self.dac0_player)
+                case "dac1":
+                    self.dac_signal[2] = var
+                    dac_data_mem_write(self.dac_signal[2], self.dac1_player)
                 case _:
-                    oled.write("Wrong command:\n{}".format(command))
+                    oled.write("Wrong command:\n{}".format(command))            
                     
     def cphase(self, rawData):
         # Calibrates phases using FFT phase estimation
@@ -461,6 +500,19 @@ class doaMtsOverlay(Overlay):
         coefs = np.zeros((4, 1), dtype=np.double)
         coefs = np.angle(self.cphase(iqData), deg=True)
         oled.write('Ph:{}'.format(np.round(coefs_new, 1)))
+
+    def dac_data_mem_write(self, signal, mem):
+        """
+        Aligns the signal to the DAC memory and writes it to the memory
+        """
+        N = len(signal)
+        mem_size = len(mem)
+        if N > mem_size: # Truncate signal to fit memory
+            signal = signal[:mem_size]
+        else: # Duplicate signal to fill memory
+            # signal = np.pad(signal, (0, mem_size-N), 'constant') # zero padding
+            signal = np.tile(signal, mem_size//N + 1)[:mem_size]            
+        mem[:] = np.int16(signal)        
         
  # -------------------------------------------------------------------------------------------------       
 def resolve_binary_path(bitfile_name):
