@@ -36,6 +36,8 @@ CHANNELS = 8
 DATA_SIZE = (2**14)*CHANNELS
 splitSym = "#"
 PHASES = [-24, -64.5, 132.88, 179.67]
+D_PHASES = [0, 0, 0, 0]
+EVENT_SRC = xrfdc.EVNT_SRC_SYSREF
 
 oled = oled.oled_display()
 class doaMtsOverlay(Overlay):
@@ -72,13 +74,16 @@ class doaMtsOverlay(Overlay):
         # xrfclk.set_ref_clks(lmk_freq = RFSOC4X2_LMK_FREQ, lmx_freq = RFSOC4X2_LMX_FREQ)
         self.ACTIVE_DAC_TILES = RFSOC4X2_DAC_TILES
         self.ACTIVE_ADC_TILES = RFSOC4X2_ADC_TILES
+        
         self.centre_freq = CENTRE_FREQ
         self.nyquist_zone = NYQUIST_ZONE
         self.dataStream = DATASTREAM
         self.channels = CHANNELS
         self.data_size = DATA_SIZE
         self.phases = PHASES
-
+        self.d_phases = D_PHASES
+        self.event_src = EVENT_SRC
+    
         self.init_rf_clks()
         time.sleep(0.5)
         super().__init__(resolve_binary_path(bitfile_name), **kwargs)
@@ -114,7 +119,8 @@ class doaMtsOverlay(Overlay):
         # self.configure_dacs()
 
         # map PL GPIO registers
-        self.dac_enable =  self.control.gpio_control.axi_gpio_dac.channel1[0]       
+        self.dac0_enable =  self.control.gpio_control.axi_gpio_dac0.channel1[0]
+        self.dac1_enable =  self.control.gpio_control.axi_gpio_dac1.channel1[0]
         self.trig_cap = self.control.gpio_control.axi_gpio_bram_adc.channel1[0]
         
         # DAC Player Memory - DACs will play this waveform
@@ -125,12 +131,18 @@ class doaMtsOverlay(Overlay):
         self.adc_capture = self.memdict_to_view("URAM_capture/axi_bram_ctrl_0")
 
         # Reset GPIOs and bring to known state
-        self.dac_enable.off()
+        self.dac0_enable.off()
+        self.dac1_enable.off()
         self.trig_cap.off() 
 
         # self.mts_sync(adcTarget = -1, mixer_phase1=-96, mixer_phase2=-96, mixer_phase3=92, mixer_phase4=100)
+        self.dac0_enable.on()
+        self.dac1_enable.on()
+        self.trig_cap.off() 
         self.mts_sync()
         self.mts_sync()
+        self.trig_cap.on() 
+        self.trig_cap.off() 
 
 
     def init_rf_clks(self, lmk_freq=RFSOC4X2_LMK_FREQ, lmx_freq=RFSOC4X2_LMX_FREQ):
@@ -169,33 +181,46 @@ class doaMtsOverlay(Overlay):
         self.trigger_capture()
         buffer[0] = np.copy(self.adc_capture[0:len(buffer[0])])
 
-    def mts_sync(self, adcTarget=-1):
+    def mts_sync(self, dacTarget=-1, adcTarget=-1):
         """
         MTS
         """
 
         # self.clocktreeMTS.MTSclkwiz.mmio.write_reg(CLOCKWIZARD_RESET_ADDRESS, CLOCKWIZARD_RESET_TOKEN)
         # time.sleep(0.1)
+        self.xrfdc.mts_dac_config.Tiles = self.ACTIVE_DAC_TILES
         self.xrfdc.mts_adc_config.Tiles = self.ACTIVE_ADC_TILES
+        self.xrfdc.mts_dac_config.SysRef_Enable = 1
         self.xrfdc.mts_adc_config.SysRef_Enable = 1
+        self.xrfdc.mts_dac_config.Target_Latency = dacTarget
         self.xrfdc.mts_adc_config.Target_Latency = adcTarget
+        self.xrfdc.mts_dac()
         self.xrfdc.mts_adc()
+        self.clocktreeMTS.MTSclkwiz.mmio.write_reg(CLOCKWIZARD_RESET_ADDRESS, CLOCKWIZARD_RESET_TOKEN)
         self.verify_clock_tree()
         # self.xrfdc.mts_adc_config.SysRef_Enable = 0
         time.sleep(0.1)
-        # self.xrfdc.mts_adc_config.Tiles = self.ACTIVE_ADC_TILES
-        # self.xrfdc.mts_adc_config.SysRef_Enable = 1
-        # self.xrfdc.mts_adc_config.Target_Latency = adcTarget
-        # self.xrfdc.mts_adc()
 
         self.configure_adc_tiles(0)
         self.configure_adc_tiles(2)
+        bitvector = self.ACTIVE_DAC_TILES
+        for n in range(MAX_DAC_TILES):
+            if (bitvector & 0x1):
+                self.xrfdc.dac_tiles[n].Reset()
+            bitvector = bitvector >> 1
+        # Reset ADC FIFO of only user selected tiles - restarts MTS engine
+        bitvector = self.ACTIVE_ADC_TILES
+        for n in range(MAX_ADC_TILES):
+            if (bitvector & 0x1):
+                self.configure_adc_tiles(n)
+            bitvector = bitvector >> 1
+        self.configure_dacs()
         self.configure_adcs()
         # time.sleep(1)
         # self.xrfdc.mts_adc_config.SysRef_Enable = 0
     def configure_adc_tiles(self, tile_num, pll_freq=500.00, sample_freq=5000.00):
             """
-            Single ADC tune
+            Single ADC tile tune
             """
             # self.adc_tiles[tile_num].Reset()
             # self.adc_tiles[tile_num].StartUp()
@@ -206,73 +231,108 @@ class doaMtsOverlay(Overlay):
             # self.adc_tiles[tile_num].SetupFIFO(True)
 
 
-    def configure_adc(self, dev_num, nyquist_zone=NYQUIST_ZONE, centre_freq=CENTRE_FREQ, event_src=xrfdc.EVNT_SRC_SYSREF, mixer_phase=0.0):
+    def configure_adc(self, dev_num, nyquist_zone=NYQUIST_ZONE, centre_freq=CENTRE_FREQ, event_src=EVENT_SRC, mixer_phase=0.0):
             """
-            Single ADC tune
+            Single ADC block tune
             """         
             self.adc[dev_num].NyquistZone = nyquist_zone
-            self.adc[dev_num].MixerSettings = {
-                'CoarseMixFreq'  : xrfdc.COARSE_MIX_BYPASS,
-                'EventSource'    : event_src,
-                'FineMixerScale' : xrfdc.MIXER_SCALE_AUTO,
-                'Freq'           : centre_freq,
-                'MixerMode'      : xrfdc.MIXER_MODE_R2C,
-                'MixerType'      : xrfdc.MIXER_TYPE_FINE,
-                'PhaseOffset'    : mixer_phase
-            }
-            self.adc[dev_num].ResetNCOPhase()
-            self.adc[dev_num].CoarseDelaySettings = {
-                'CoarseDelay'    : 0, 
-                'EventSource'    : event_src
+            self.adc[dev_num].Dither = 1 # Selects if dither is enabled for the selected tile. Dither should be enabled unless the sample rate is under 0.75 times the maximum sampling rate for the RF-ADC.
+            self.adc[dev_num].CalibrationMode = 2 # Mode 1, optimized for the input signal locates from 0.4 * Fs to Fs/2 Mode 2, optimized for the input signal locates from 0 to 0.4 * Fs
+            self.adc[dev_num].CalFreeze = {
+                'CalFrozen'             : 0, 
+                'DisableFreezePin'      : 0, 
+                'FreezeCalibration'     : 0
                 }
+            self.adc[dev_num].CoarseDelaySettings = {
+                'CoarseDelay'           : 0, 
+                'EventSource'           : event_src
+                }
+            self.adc[dev_num].MixerSettings = {
+            'Freq'                  : centre_freq,
+            'PhaseOffset'           : mixer_phase,
+            'EventSource'           : event_src,
+            'CoarseMixFreq'         : xrfdc.COARSE_MIX_BYPASS,
+            'MixerMode'             : xrfdc.MIXER_MODE_R2C,
+            'FineMixerScale'        : xrfdc.MIXER_SCALE_AUTO,
+            'MixerType'             : xrfdc.MIXER_TYPE_FINE
+        }
+            self.adc[dev_num].ResetNCOPhase()
+
             self.adc[dev_num].QMCSettings = {
-                'EnablePhase'    : 0,
-                'EnableGain'     : 1,
-                'GainCorrectionFactor': 1.9,
-                'PhaseCorrectionFactor': 0.0,
+                'EnablePhase'           : 0,
+                'EnableGain'            : 1,
+                'GainCorrectionFactor'  : 1.99,
+                'PhaseCorrectionFactor' : 0.0,
                 'OffsetCorrectionFactor': 0,
-                'EventSource': event_src}
+                'EventSource'           : event_src
+                }
             if not(event_src==xrfdc.EVNT_SRC_SYSREF):
                 self.adc[dev_num].UpdateEvent(xrfdc.EVENT_MIXER)
                 self.adc[dev_num].UpdateEvent(xrfdc.EVENT_CRSE_DLY)
                 self.adc[dev_num].UpdateEvent(xrfdc.EVENT_QMC)
             
-    def configure_adcs(self, nyquist_zone=NYQUIST_ZONE, centre_freq=CENTRE_FREQ, event_src=xrfdc.EVNT_SRC_SYSREF, mixer_phase1=PHASES[0], mixer_phase2=PHASES[1], mixer_phase3=PHASES[2], mixer_phase4=PHASES[3]):
+    def configure_adcs(self):
             """
-            All ADCs tune
+            All ADCs blocks tune
             """
-            self.configure_adc(0, self.nyquist_zone, self.centre_freq, event_src, self.phases[0])
-            self.configure_adc(1, self.nyquist_zone, self.centre_freq, event_src, self.phases[1])
-            self.configure_adc(2, self.nyquist_zone, self.centre_freq, event_src, self.phases[2])
-            self.configure_adc(3, self.nyquist_zone, self.centre_freq, event_src, self.phases[3])
+            bitvector = self.ACTIVE_ADC_TILES
+            for n in range(MAX_ADC_TILES):
+                self.configure_adc(n, self.nyquist_zone, self.centre_freq, self.event_src, self.phases[n])
 
-    def configure_dac(self, tile_num, dev_num, pll_freq=500.00, sample_freq=5000.00, nyquist_zone=2, centre_freq=0):
+    def configure_dac(self, dev_num, nyquist_zone=NYQUIST_ZONE, centre_freq=CENTRE_FREQ, event_src=EVENT_SRC, mixer_phase=0.0):
         """
-        Single DAC tune
+        Single DAC block tune
         """
         
-        self.dac_tiles[tile_num].DynamicPLLConfig(1, pll_freq, sample_freq)
+        # self.dac_tiles[tile_num].DynamicPLLConfig(1, pll_freq, sample_freq)
         self.dac[dev_num].NyquistZone = nyquist_zone
+        self.dac[dev_num].Dither = 1 # Selects if dither is enabled for the selected tile. Dither should be enabled unless the sample rate is under 0.75 times the maximum sampling rate for the RF-ADC.
+        self.dac[dev_num].CalibrationMode = 2 # Mode 1, optimized for the input signal locates from 0.4 * Fs to Fs/2 Mode 2, optimized for the input signal locates from 0 to 0.4 * Fs
+        self.dac[dev_num].SetDACVOP(40500)
+        self.dac[dev_num].CalFreeze = {
+            'CalFrozen'             : 0, 
+            'DisableFreezePin'      : 0, 
+            'FreezeCalibration'     : 0
+            }
+        self.dac[dev_num].CoarseDelaySettings = {
+            'CoarseDelay'           : 0, 
+            'EventSource'           : event_src
+            }
         self.dac[dev_num].MixerSettings = {
-            'CoarseMixFreq'  : xrfdc.COARSE_MIX_BYPASS,
-            'EventSource'    : xrfdc.EVNT_SRC_SYSREF,
-            'FineMixerScale' : xrfdc.MIXER_SCALE_AUTO,
-            'Freq'           : centre_freq,
-            'MixerMode'      : xrfdc.MIXER_MODE_R2R,
-            'MixerType'      : xrfdc.MIXER_TYPE_COARSE,
-            'PhaseOffset'    : 0.0
+            'Freq'                  : centre_freq,
+            'PhaseOffset'           : mixer_phase,
+            'EventSource'           : event_src,
+            'CoarseMixFreq'         : xrfdc.COARSE_MIX_BYPASS,
+            'MixerMode'             : xrfdc.MIXER_MODE_C2R,
+            'FineMixerScale'        : xrfdc.MIXER_SCALE_AUTO,
+            'MixerType'             : xrfdc.MIXER_TYPE_FINE
         }
-        self.dac[dev_num].UpdateEvent(xrfdc.EVNT_SRC_TILE)
-        self.dac_tiles[tile_num].SetupFIFO(True)            
+        self.dac[dev_num].QMCSettings = {
+            'EnablePhase'           : 0,
+            'EnableGain'            : 1,
+            'GainCorrectionFactor'  : 1.99,
+            'PhaseCorrectionFactor' : 0.0,
+            'OffsetCorrectionFactor': 0,
+            'EventSource'           : event_src
+            }
+        self.dac[dev_num].ResetNCOPhase()
+        # self.dac_tiles[tile_num].SetupFIFO(True)
 
-    def configure_dacs(self, pll_freq=500.00, sample_freq=5000.00, nyquist_zone=2, centre_freq=0):
-        """
-        All DAC tune
-        """
-        
-        self.configure_dac(0,0)
-        self.configure_dac(2,0)
+        if not(event_src==xrfdc.EVNT_SRC_SYSREF):
+                self.adc[dev_num].UpdateEvent(xrfdc.EVENT_MIXER)
+                self.adc[dev_num].UpdateEvent(xrfdc.EVENT_CRSE_DLY)
+                self.adc[dev_num].UpdateEvent(xrfdc.EVENT_QMC)            
 
+    def configure_dacs(self):
+        """
+        All DAC blocks tune
+        """
+        bitvector = self.ACTIVE_ADC_TILES
+        for n in range(MAX_ADC_TILES):
+            if (bitvector & 0x1):
+                self.configure_dac(n, self.nyquist_zone, self.centre_freq, self.event_src, self.d_phases[n])
+            bitvector = bitvector >> 1
+            
         
     def get_custom_data(self, data_size):
         """
@@ -308,6 +368,7 @@ class doaMtsOverlay(Overlay):
                 case "fc":
                     self.centre_freq = var[0]
                     self.nyquist_zone = var[1]
+                    self.configure_dacs()
                     self.configure_adcs()
                 case "cal":
                     self.channels = var[0]
