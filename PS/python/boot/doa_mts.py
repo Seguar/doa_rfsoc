@@ -94,7 +94,7 @@ class doaMtsOverlay(Overlay):
         self.d_nyquist_zone = D_NYQUIST_ZONE    
 
         self.da = DA
-        self.dac_signal = [np.zeros(len(self.dac0_player), dtype=np.int16), 0, np.zeros(len(self.dac1_player), dtype=np.int16), 0]    
+        
     
         self.init_rf_clks()
         time.sleep(0.5)
@@ -132,6 +132,7 @@ class doaMtsOverlay(Overlay):
         self.dac0_player = self.memdict_to_view("dac_0/axi_bram_ctrl_0")
         self.dac1_player = self.memdict_to_view("dac_1/axi_bram_ctrl_0")
         
+        self.dac_signal = [np.zeros_like(self.dac0_player.shape[0]), 0, np.zeros_like(self.dac1_player.shape[0]), 0]    
         # ADC Capture Memories
         self.adc_capture = self.memdict_to_view("URAM_capture/axi_bram_ctrl_0")
 
@@ -200,7 +201,7 @@ class doaMtsOverlay(Overlay):
         self.xrfdc.mts_adc_config.Target_Latency = adcTarget
         self.xrfdc.mts_dac()
         self.xrfdc.mts_adc()
-        self.clocktreeMTS.MTSclkwiz.mmio.write_reg(CLOCKWIZARD_RESET_ADDRESS, CLOCKWIZARD_RESET_TOKEN)
+        # self.clocktreeMTS.MTSclkwiz.mmio.write_reg(CLOCKWIZARD_RESET_ADDRESS, CLOCKWIZARD_RESET_TOKEN)
         self.verify_clock_tree()
         # self.xrfdc.mts_adc_config.SysRef_Enable = 0
         time.sleep(0.1)
@@ -334,7 +335,7 @@ class doaMtsOverlay(Overlay):
         bitvector = self.ACTIVE_ADC_TILES
         for n in range(MAX_ADC_TILES):
             if (bitvector & 0x1):
-                self.configure_dac(n, self.nyquist_zone, self.centre_freq, self.event_src, self.d_phases[n])
+                self.configure_dac(n, self.d_nyquist_zone[n], self.d_centre_freq[n], self.event_src, self.d_phases[n])
             bitvector = bitvector >> 1
             
         
@@ -364,9 +365,10 @@ class doaMtsOverlay(Overlay):
             return message
         
     def handle_commands(self, commandList):
+        print(commandList)
         for command_str in commandList:
             command, var = command_str.split()
-            var = var.split('/')
+            var = var.split('/')            
             var = list(map(int, var))
             match command:
                 case "fc":
@@ -382,8 +384,10 @@ class doaMtsOverlay(Overlay):
                 case "phase":
                     self.phases = var
                     self.mts_sync()
+                    self.mts_sync()
                 case "dphase":
                     self.d_phases = var
+                    self.mts_sync()
                     self.mts_sync()
                 case "dataChan":
                     self.data_size = var[0]
@@ -393,34 +397,34 @@ class doaMtsOverlay(Overlay):
                     self.dataStream = var[0]
                 case "da":
                     self.da = var[0]
-                    match self.da
-                        case "all": # DACs = ADCs params
-                            self.d_centre_freq[:] = self.centre_freq
-                            self.d_nyquist_zone[:] = self.nyquist_zone
+                    match self.da:
+                        case 2: # DACs = ADCs sync
+                            self.dac0_enable.off()
+                            self.dac1_enable.off()
+                            self.trig_cap.off()
+                            self.trig_cap.on() 
+                            self.trig_cap.off()
+                        case 1: # DACs = DACs sync
+                            self.dac0_enable.off()
+                            self.dac1_enable.off()
+                            self.trig_cap.off()
+                            self.trig_cap.on() 
                             self.dac0_enable.on()
                             self.dac1_enable.on()
-                            self.trig_cap.off() 
-                            self.mts_sync()
-                            self.trig_cap.on() 
-                            self.trig_cap.off() 
-                        case "dac": # DACs = DACs only
-                            self.d_centre_freq[:] = self.d_centre_freq[0]
-                            self.d_nyquist_zone[:] = self.d_nyquist_zone[0]
+                            self.trig_cap.off()                            
+                        case 0: # DACs =/= ADCs without sync
+                            self.dac0_enable.off()
+                            self.dac1_enable.off()
                             self.dac0_enable.on()
                             self.dac1_enable.on()
-                            self.trig_cap.off() 
-                            self.mts_sync()
-                            self.trig_cap.on() 
-                            self.trig_cap.off() 
-                        case "none": # DACs =/= ADCs
-                            self.configure_dacs()
-                            self.configure_adcs()
                 case "dac0":
                     self.dac_signal[0] = var
                     dac_data_mem_write(self.dac_signal[0], self.dac0_player)
                 case "dac1":
                     self.dac_signal[2] = var
                     dac_data_mem_write(self.dac_signal[2], self.dac1_player)
+                case "dacPow":
+                    pass
                 case _:
                     oled.write("Wrong command:\n{}".format(command))            
                     
