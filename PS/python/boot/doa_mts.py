@@ -142,13 +142,9 @@ class doaMtsOverlay(Overlay):
         self.trig_cap.off() 
 
         # MTS power up sequence
-        self.dac0_enable.on()
-        self.dac1_enable.on()
-        self.trig_cap.off() 
-        self.mts_sync()
-        self.mts_sync()
-        self.trig_cap.on() 
-        self.trig_cap.off() 
+        self.init_tile_sync()
+        self.verify_clock_tree()
+        self.sync_tiles()
 
     def init_rf_clks(self, lmk_freq=RFSOC4X2_LMK_FREQ, lmx_freq=RFSOC4X2_LMX_FREQ):
         """Initialise the LMK and LMX clocks for the radio hierarchy.
@@ -174,9 +170,10 @@ class doaMtsOverlay(Overlay):
             raise Exception("The MTS ClockTree has failed to LOCK. Please verify board clocking configuration")
 
     def trigger_capture(self):
-        """ Internal loopback of DAC waveform to internal capture mirror"""        
+        """ Trigger for buffer capture"""        
         self.trig_cap.off()
         self.trig_cap.on() # actually triggers adc[A..D] to capture too
+        # time.sleep(0.1) # For DAC sync
         self.trig_cap.off()
 
     def internal_capture(self, buffer):
@@ -185,8 +182,55 @@ class doaMtsOverlay(Overlay):
             raise Exception("buffer not defined or np.int16!")
         self.trigger_capture()
         buffer[0] = np.copy(self.adc_capture[0:len(buffer[0])])
+        
+    def sync_tiles(self, dacTarget=-1, adcTarget=-1):
+        """ Configures RFSoC MTS alignment"""
+        # Set which RF tiles use MTS and turn MTS off
+        if self.ACTIVE_DAC_TILES > 0:
+            self.xrfdc.mts_dac_config.Tiles = self.ACTIVE_DAC_TILES # group defined in binary 0b1111
+            self.xrfdc.mts_dac_config.SysRef_Enable = 1
+            self.xrfdc.mts_dac_config.Target_Latency = dacTarget 
+            self.xrfdc.mts_dac()
+        else:
+            self.xrfdc.mts_dac_config.Tiles = 0x0
+            self.xrfdc.mts_dac_config.SysRef_Enable = 0
+        if self.ACTIVE_ADC_TILES > 0:
+            self.xrfdc.mts_adc_config.Tiles = self.ACTIVE_ADC_TILES
+            self.xrfdc.mts_adc_config.SysRef_Enable = 1
+            self.xrfdc.mts_adc_config.Target_Latency = adcTarget
+            self.xrfdc.mts_adc()
+        else:
+            self.xrfdc.mts_adc_config.Tiles = 0x0
+            self.xrfdc.mts_adc_config.SysRef_Enable = 0
 
-    def mts_sync(self, dacTarget=-1, adcTarget=-1):
+    def init_tile_sync(self):
+        """ Resets the MTS alignment engine"""
+        self.xrfdc.mts_dac_config.Tiles = 0b0001 # turn only one tile on first
+        self.xrfdc.mts_adc_config.Tiles = 0b0001
+        self.xrfdc.mts_dac_config.SysRef_Enable = 1
+        self.xrfdc.mts_adc_config.SysRef_Enable = 1
+        self.xrfdc.mts_dac_config.Target_Latency = -1
+        self.xrfdc.mts_adc_config.Target_Latency = -1
+        self.xrfdc.mts_dac()
+        self.xrfdc.mts_adc()
+        # Reset MTS ClockWizard MMCM - refer to PG065
+        self.clocktreeMTS.MTSclkwiz.mmio.write_reg(CLOCKWIZARD_RESET_ADDRESS, CLOCKWIZARD_RESET_TOKEN)
+        time.sleep(0.1)
+        # Reset only user selected DAC tiles
+        bitvector = self.ACTIVE_DAC_TILES
+        for n in range(MAX_DAC_TILES):
+            if (bitvector & 0x1):
+                self.xrfdc.dac_tiles[n].Reset()
+            bitvector = bitvector >> 1
+        # Reset ADC FIFO of only user selected tiles - restarts MTS engine
+        for toggleValue in range(0,1):
+            bitvector = self.ACTIVE_ADC_TILES
+            for n in range(MAX_ADC_TILES):
+                if (bitvector & 0x1):
+                    self.xrfdc.adc_tiles[n].SetupFIFOBoth(toggleValue)
+                bitvector = bitvector >> 1
+                
+    def mts_sync(self, dacTarget=-1, adcTarget=-1): #TODO REWORK
         """
         MTS
         """
@@ -211,7 +255,8 @@ class doaMtsOverlay(Overlay):
         bitvector = self.ACTIVE_DAC_TILES
         for n in range(MAX_DAC_TILES):
             if (bitvector & 0x1):
-                self.xrfdc.dac_tiles[n].Reset()
+                self.dac_tiles[n].Reset()
+                self.configure_dac_tiles(n)
             bitvector = bitvector >> 1
         # Reset ADC FIFO of only user selected tiles - restarts MTS engine
         bitvector = self.ACTIVE_ADC_TILES
@@ -223,6 +268,7 @@ class doaMtsOverlay(Overlay):
         self.configure_adcs()
         # time.sleep(1)
         # self.xrfdc.mts_adc_config.SysRef_Enable = 0
+
     def configure_adc_tiles(self, tile_num, pll_freq=500.00, sample_freq=5000.00):
             """
             Single ADC tile tune
@@ -234,7 +280,6 @@ class doaMtsOverlay(Overlay):
             self.adc_tiles[tile_num].SetupFIFOBoth(0)
             self.adc_tiles[tile_num].SetupFIFOBoth(1)
             # self.adc_tiles[tile_num].SetupFIFO(True)
-
 
     def configure_adc(self, dev_num, nyquist_zone=NYQUIST_ZONE, centre_freq=CENTRE_FREQ, event_src=EVENT_SRC, mixer_phase=0.0):
             """
@@ -284,21 +329,25 @@ class doaMtsOverlay(Overlay):
             for n in range(MAX_ADC_TILES):
                 self.configure_adc(n, self.nyquist_zone, self.centre_freq, self.event_src, self.phases[n])
 
+    def configure_dac_tiles(self, tile_num, pll_freq=500.00, sample_freq=5000.00):
+        """
+        Single DAC tile tune
+        """
+        # self.dac_tiles[tile_num].Reset()
+        # self.dac_tiles[tile_num].StartUp()
+        # time.sleep(0.5)
+        # self.dac_tiles[tile_num].DynamicPLLConfig(1, pll_freq, sample_freq)
+        self.dac_tiles[tile_num].SetupFIFO(False)
+        self.dac_tiles[tile_num].SetupFIFO(True)
+
     def configure_dac(self, dev_num, nyquist_zone=NYQUIST_ZONE, centre_freq=CENTRE_FREQ, event_src=EVENT_SRC, mixer_phase=0.0):
         """
         Single DAC block tune
         """
         
-        # self.dac_tiles[tile_num].DynamicPLLConfig(1, pll_freq, sample_freq)
         self.dac[dev_num].NyquistZone = nyquist_zone
-        self.dac[dev_num].Dither = 1 # Selects if dither is enabled for the selected tile. Dither should be enabled unless the sample rate is under 0.75 times the maximum sampling rate for the RF-ADC.
-        self.dac[dev_num].CalibrationMode = 2 # Mode 1, optimized for the input signal locates from 0.4 * Fs to Fs/2 Mode 2, optimized for the input signal locates from 0 to 0.4 * Fs
-        self.dac[dev_num].SetDACVOP(40500)
-        self.dac[dev_num].CalFreeze = {
-            'CalFrozen'             : 0, 
-            'DisableFreezePin'      : 0, 
-            'FreezeCalibration'     : 0
-            }
+        self.dac[dev_num].SetDACVOP(40500) # Max output current
+
         self.dac[dev_num].CoarseDelaySettings = {
             'CoarseDelay'           : 0, 
             'EventSource'           : event_src
@@ -321,7 +370,6 @@ class doaMtsOverlay(Overlay):
             'EventSource'           : event_src
             }
         self.dac[dev_num].ResetNCOPhase()
-        # self.dac_tiles[tile_num].SetupFIFO(True)
 
         if not(event_src==xrfdc.EVNT_SRC_SYSREF):
                 self.adc[dev_num].UpdateEvent(xrfdc.EVENT_MIXER)
@@ -365,7 +413,6 @@ class doaMtsOverlay(Overlay):
             return message
         
     def handle_commands(self, commandList):
-        print(commandList)
         for command_str in commandList:
             command, var = command_str.split()
             var = var.split('/')            
@@ -378,17 +425,18 @@ class doaMtsOverlay(Overlay):
                     self.d_nyquist_zone = [var[3], var[3], var[5], var[5]]
                     self.configure_dacs()
                     self.configure_adcs()
+                    self.sync_tiles()
                 case "cal": # Only for ADCs
                     self.channels = var[0]
                     self.calibrate()
                 case "phase":
                     self.phases = var
-                    self.mts_sync()
-                    self.mts_sync()
+                    self.configure_adcs()
+                    self.sync_tiles()
                 case "dphase":
                     self.d_phases = var
-                    self.mts_sync()
-                    self.mts_sync()
+                    self.configure_dacs()
+                    self.sync_tiles()
                 case "dataChan":
                     self.data_size = var[0]
                     oled.write("Data Size:\n{}".format(self.data_size))
@@ -419,10 +467,10 @@ class doaMtsOverlay(Overlay):
                             self.dac1_enable.on()
                 case "dac0":
                     self.dac_signal[0] = var
-                    dac_data_mem_write(self.dac_signal[0], self.dac0_player)
+                    self.dac_data_mem_write(self.dac_signal[0], self.dac0_player)
                 case "dac1":
                     self.dac_signal[2] = var
-                    dac_data_mem_write(self.dac_signal[2], self.dac1_player)
+                    self.dac_data_mem_write(self.dac_signal[2], self.dac1_player)
                 case "dacPow":
                     pass
                 case _:
@@ -457,10 +505,10 @@ class doaMtsOverlay(Overlay):
         return weights
     
     def calibrate(self, channels=CHANNELS):
-        coefs_i = [-90, -90, 90, 90]
+        coefs_i = [-90, -90, 90, 90] # Initial phases because of hardware inputs swap
         self.phases = coefs_i
-        self.mts_sync()
-        self.mts_sync()
+        self.configure_adcs()
+        self.sync_tiles()
 
         N = len(self.adc_capture) // self.channels
 
@@ -484,8 +532,8 @@ class doaMtsOverlay(Overlay):
         coefs_new = coefs_i + coefs
         coefs_new = np.clip(coefs_new, -179, 179)
         self.phases = coefs_new
-        self.mts_sync()
-        self.mts_sync()
+        self.configure_adcs()
+        self.sync_tiles()
 
         # Data acq from FPGA
         AlignedCaptureSamples = np.zeros((1,len(self.adc_capture)),dtype=np.int16)
