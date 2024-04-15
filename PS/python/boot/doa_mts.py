@@ -37,12 +37,14 @@ EVENT_SRC = xrfdc.EVNT_SRC_SYSREF # For MTS
 
 NYQUIST_ZONE = 2
 CENTRE_FREQ = 5700
-PHASES = [-24, -64.5, 132.88, 179.67]
+PHASES = [-90, -90, 90, 90]
 D_PHASES = [0, 0, 0, 0]
 D_NYQUIST_ZONE = [2, 2, 2, 2]
 D_CENTRE_FREQ = [5700, 5700, 5700, 5700]
 
-DA = "all" # "all" DACs = ADCs params, "dac" DACs = DACs only, "none" DACs =/= ADCs TODO implement
+DACPOWER = [1, 0, 1, 0]
+
+DA = 2 # Sync DACs with ADCs
 
 oled = oled.oled_display()
 class doaMtsOverlay(Overlay):
@@ -91,10 +93,10 @@ class doaMtsOverlay(Overlay):
         # DAC parameters
         self.d_phases = D_PHASES
         self.d_centre_freq = D_CENTRE_FREQ
-        self.d_nyquist_zone = D_NYQUIST_ZONE    
+        self.d_nyquist_zone = D_NYQUIST_ZONE   
+        self.dacPower = DACPOWER 
 
-        self.da = DA
-        
+        self.da = DA        
     
         self.init_rf_clks()
         time.sleep(0.5)
@@ -130,15 +132,14 @@ class doaMtsOverlay(Overlay):
         
         # DAC Player Memory - DACs will play this waveform
         self.dac0_player = self.memdict_to_view("dac_0/axi_bram_ctrl_0")
-        self.dac1_player = self.memdict_to_view("dac_1/axi_bram_ctrl_0")
-        
+        self.dac1_player = self.memdict_to_view("dac_1/axi_bram_ctrl_0")        
         self.dac_signal = [np.zeros_like(self.dac0_player.shape[0]), 0, np.zeros_like(self.dac1_player.shape[0]), 0]    
+
         # ADC Capture Memories
         self.adc_capture = self.memdict_to_view("URAM_capture/axi_bram_ctrl_0")
 
         # Reset GPIOs and bring to known state
-        self.dac0_enable.off()
-        self.dac1_enable.off()
+        self.dacs_off()
         self.trig_cap.off() 
 
         # MTS power up sequence
@@ -173,7 +174,8 @@ class doaMtsOverlay(Overlay):
         """ Trigger for buffer capture"""        
         self.trig_cap.off()
         self.trig_cap.on() # actually triggers adc[A..D] to capture too
-        # time.sleep(0.1) # For DAC sync
+        if self.da == 2:
+            time.sleep(0.01) # For DAC sync        
         self.trig_cap.off()
 
     def internal_capture(self, buffer):
@@ -447,24 +449,19 @@ class doaMtsOverlay(Overlay):
                     self.da = var[0]
                     match self.da:
                         case 2: # DACs = ADCs sync
-                            self.dac0_enable.off()
-                            self.dac1_enable.off()
+                            self.dacs_off()
                             self.trig_cap.off()
                             self.trig_cap.on() 
                             self.trig_cap.off()
                         case 1: # DACs = DACs sync
-                            self.dac0_enable.off()
-                            self.dac1_enable.off()
+                            self.dacs_off()
                             self.trig_cap.off()
                             self.trig_cap.on() 
-                            self.dac0_enable.on()
-                            self.dac1_enable.on()
+                            self.dacs_control()
                             self.trig_cap.off()                            
                         case 0: # DACs =/= ADCs without sync
-                            self.dac0_enable.off()
-                            self.dac1_enable.off()
-                            self.dac0_enable.on()
-                            self.dac1_enable.on()
+                            self.dacs_off()
+                            self.dacs_control()
                 case "dac0":
                     self.dac_signal[0] = var
                     self.dac_data_mem_write(self.dac_signal[0], self.dac0_player)
@@ -472,10 +469,25 @@ class doaMtsOverlay(Overlay):
                     self.dac_signal[2] = var
                     self.dac_data_mem_write(self.dac_signal[2], self.dac1_player)
                 case "dacPow":
-                    pass
+                    self.dacPower = var
                 case _:
                     oled.write("Wrong command:\n{}".format(command))            
-                    
+
+    def dacs_control(self): #TODO REWORK
+        if self.dacPower[0]:
+            self.dac0_enable.on()
+        else:
+            self.dac0_enable.off()
+
+        if self.dacPower[2]:
+            self.dac1_enable.on()
+        else:
+            self.dac1_enable.off()
+
+    def dacs_off(self):
+        self.dac0_enable.off()
+        self.dac1_enable.off()
+
     def cphase(self, rawData):
         # Calibrates phases using FFT phase estimation
         # Takes the maximum of the abs value of the FFT of the signal
