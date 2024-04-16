@@ -462,12 +462,16 @@ class doaMtsOverlay(Overlay):
                         case 0: # DACs =/= ADCs without sync
                             self.dacs_off()
                             self.dacs_control()
-                case "dac0":
+                case "dac0":    
                     self.dac_signal[0] = var
+                    oled.write("Dac0 loading:\n{}".format(len(var)))
                     self.dac_data_mem_write(self.dac_signal[0], self.dac0_player)
+                    oled.write("Dac0 loaded")
                 case "dac1":
                     self.dac_signal[2] = var
+                    oled.write("Dac1 loading:\n{}".format(len(var)))
                     self.dac_data_mem_write(self.dac_signal[2], self.dac1_player)
+                    oled.write("Dac0 loaded")
                 case "dacPow":
                     self.dacPower = var
                 case _:
