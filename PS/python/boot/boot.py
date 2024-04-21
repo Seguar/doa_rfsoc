@@ -12,6 +12,8 @@ import socket
 import struct
 import numpy as np
 from doa_mts import *
+import scipy.io
+
 
 oled.write("RFSoC-PYNQ\nVersion {}".format(pynq.__version__))
 
@@ -27,38 +29,13 @@ lmk_clk_sel1.write(0)
 
 ps_btn = GPIO(357, 'in') #  GPIO.get_gpio_base() + pin num
 
-
-
-
-# base = BaseOverlay('base.bit')
-# oled.write("Base done")
-# sleep(0.2)
-# base.init_rf_clks()
-# oled.write("Clk done")
-# sleep(0.2)
-
 o1 = doaMtsOverlay('doa_mts.bit')
 
-# o1.dac_enable.on()
-# from scipy.signal import chirp
-# from scipy.signal import sawtooth
-# from scipy.signal import gausspulse
+mat = scipy.io.loadmat('data.mat')
 
-# DAC_SR = 10.0E9  # Sample rate of DACs and ADCs is 4.0 GHz
-# ADC_SR = 10.0E9
-# Fc = 500.0E6 # Set center frequency of waveform to 250.0 MHz
-# Fe = 500.0E6 # maximum frequency of chirp at end of record
-# DAC_Amplitude = 16383.0  # 14bit DAC +16383/-16384
-# X_axis = (1/DAC_SR) * np.arange(0,o1.dac1_player.shape[0])
-# # generate some basic waveforms
-# DAC_sinewave = DAC_Amplitude * np.sin(2*np.pi*Fc*X_axis)
-# DAC_sawtooth = DAC_Amplitude * sawtooth(2 * np.pi * Fc * X_axis)
-# DAC_chirp = DAC_Amplitude * chirp(np.arange(0, o1.dac1_player.shape[0])/DAC_SR,
-#                                   f0=Fc, f1=Fe, t1=(o1.dac1_player.shape[0]/DAC_SR), 
-#                                   phi=0.0, method='linear')
-
-# o1.dac0_player[:] = np.int16(DAC_sinewave)
-# o1.dac1_player[:] = np.int16(DAC_sinewave)
+data = mat.get('sigInt16')
+o1.dac_data_mem_write(data[0], o1.dac0_player)
+o1.dac_data_mem_write(data[0], o1.dac1_player)
 
 
 try:
@@ -89,16 +66,16 @@ while True:
     if ps_btn.read() == 1:
         oled.write("PS BTN reset\nServer Shutdown")
         break
-    commandList = o1.handle_client_connection(client_socket).split(splitSym)
-    o1.handle_commands(commandList)
-    while o1.dataStream:    
-        try:
+    try:
+        commandList = o1.handle_client_connection(client_socket).split(splitSym)
+        print(commandList)
+        o1.handle_commands(commandList)
+        while o1.dataStream:    
             data = o1.get_custom_data(o1.data_size)
             data_binary = struct.pack('h' * o1.data_size, *data)
             client_socket.sendall(data_binary)
-        except:
-            server_socket.listen(1)
-            client_socket, client_address = server_socket.accept()
-            oled.write("New connection")
-            break
+    except:
+        server_socket.listen(1)
+        client_socket, client_address = server_socket.accept()
+        oled.write("New connection")
 

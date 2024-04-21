@@ -145,6 +145,8 @@ class doaMtsOverlay(Overlay):
         # MTS power up sequence
         self.init_tile_sync()
         self.verify_clock_tree()
+        self.configure_dacs()
+        self.configure_adcs()
         self.sync_tiles()
 
     def init_rf_clks(self, lmk_freq=RFSOC4X2_LMK_FREQ, lmx_freq=RFSOC4X2_LMX_FREQ):
@@ -349,6 +351,9 @@ class doaMtsOverlay(Overlay):
         
         self.dac[dev_num].NyquistZone = nyquist_zone
         self.dac[dev_num].SetDACVOP(40500) # Max output current
+        self.dac[dev_num].DataPathMode = 3
+        self.dac[dev_num].IMRPassMode = 1
+        self.dac[dev_num].InvSincFIR = 1
 
         self.dac[dev_num].CoarseDelaySettings = {
             'CoarseDelay'           : 0, 
@@ -404,7 +409,7 @@ class doaMtsOverlay(Overlay):
             data = b''
             while True:
                 chunk = client_socket.recv(1)  # Receive one byte at a time
-                if chunk == b'\r' or chunk == b'\n':  # ASCII CR or LF character
+                if chunk == b'\r' or chunk == b'\n' or chunk == b'':  # ASCII CR or LF character
                     break
                 data += chunk
 
