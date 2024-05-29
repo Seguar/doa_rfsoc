@@ -1,4 +1,4 @@
-# doa_rfsoc for RFSoC 4x2 board
+# doa_rfsoc for ZCU216 board
 This project is based on [Xilinx's RFSoC MTS example](https://github.com/Xilinx/RFSoC-MTS)
 ## Preparations
 Your PYNQ version should be at least [3.0.1](http://www.pynq.io/board.html).
