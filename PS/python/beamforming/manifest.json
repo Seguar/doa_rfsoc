@@ -1,0 +1,65 @@
+{
+  "collection_date": "2026-11-15",
+  "source_directory": "Demo/trig_out/v2/demo_new_rfmc/imp/fast/fix/algo/track/corr",
+  "selection": "Strongest recency-plus-saved-execution candidate, not proven last-used notebook. Board clock incorrect; root Jupyter history inaccessible.",
+  "board": "ZCU216 RevA",
+  "versions": {
+    "pynq": "3.0.1",
+    "xrfclk": "2.0",
+    "xrfdc": "2.0",
+    "numpy": "1.21.5",
+    "scipy": "1.8.0",
+    "netifaces": "0.11.0"
+  },
+  "hwh_vivado_version": "2023.2.2",
+  "files": [
+    {
+      "file": "algorithm_worker.py",
+      "source_sha256": "e3fb8bcf2abf9c8f02862c88f42be6a3f0c8c029e82fb33c67372cc08bc96f5b",
+      "repository_sha256": "e3fb8bcf2abf9c8f02862c88f42be6a3f0c8c029e82fb33c67372cc08bc96f5b",
+      "transformation": "none"
+    },
+    {
+      "file": "boot_reworked_human_readable.ipynb",
+      "source_sha256": "a0e3c374161577d2c478ff02f8fb8dbe9d32112d3d08080a5af89733ad1ec34f",
+      "repository_sha256": "cfade0f4c319eb73e20a200c9c8225287ef0c1c49192672c0dad116252bc13c0",
+      "transformation": "execution counts and outputs cleared"
+    },
+    {
+      "file": "calculate_fixed_spectrum_py.py",
+      "source_sha256": "782b293102e401fa896ea5644d5c3dbd033ef2f9cce3ce8af22ce5a611cac692",
+      "repository_sha256": "782b293102e401fa896ea5644d5c3dbd033ef2f9cce3ce8af22ce5a611cac692",
+      "transformation": "none"
+    },
+    {
+      "file": "mts.bit",
+      "source_sha256": "aadfc510cd82ba3f4a7ba8bc755fb72bdd743a1b0619635da907131676d8f89e",
+      "repository_sha256": "aadfc510cd82ba3f4a7ba8bc755fb72bdd743a1b0619635da907131676d8f89e",
+      "transformation": "none"
+    },
+    {
+      "file": "mts.hwh",
+      "source_sha256": "50af1d2e899c72ea2dc6de1415ade095d11ac0fbf212c8dbfdec7404f6d01cab",
+      "repository_sha256": "50af1d2e899c72ea2dc6de1415ade095d11ac0fbf212c8dbfdec7404f6d01cab",
+      "transformation": "none"
+    },
+    {
+      "file": "mts.py",
+      "source_sha256": "31c952235107f00b4bfdf757acc0d8983eb0ee8b4826080d683487e1871a8688",
+      "repository_sha256": "31c952235107f00b4bfdf757acc0d8983eb0ee8b4826080d683487e1871a8688",
+      "transformation": "none"
+    },
+    {
+      "file": "rfsoc_notebook_server.py",
+      "source_sha256": "33e6949d6caf130b672002eb098e42a408002d7bacaa16f24126dea6230dd5f8",
+      "repository_sha256": "33e6949d6caf130b672002eb098e42a408002d7bacaa16f24126dea6230dd5f8",
+      "transformation": "none"
+    },
+    {
+      "file": "run_rfsoc_server.py",
+      "source_sha256": "0cc5b1ac9a340e9ee1bf6d2925b687c760665abe7fd76ea24043f2aba99dcb36",
+      "repository_sha256": "0cc5b1ac9a340e9ee1bf6d2925b687c760665abe7fd76ea24043f2aba99dcb36",
+      "transformation": "none"
+    }
+  ]
+}
