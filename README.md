@@ -1,4 +1,18 @@
 # doa_rfsoc for RFSoC 4x2 board
+
+## Board reconciliation — 2026-11-15
+
+See the [recovered deployment audit](runtime/rfsoc4x2/README.md) for the observed
+live `/boot/boot.py` service, synchronized boot script, newer MultiTest notebooks,
+matching hardware hashes, clock files and protocol limitations. The boot wrapper,
+bit/HWH pair and waveform already matched `PS/python/boot`; the different
+`PL/out` pair is not an interchangeable substitute.
+
+The newest saved notebook is not proven to be the latest used: the board clock
+is incorrect and authenticated Jupyter sessions were unavailable. MultiTest is
+preserved as experimental code. This branch targets RFSoC 4x2; ZCU216 uses the
+separate `zcu216` branch and a different server protocol.
+
 This project is based on [Xilinx's RFSoC MTS example](https://github.com/Xilinx/RFSoC-MTS)
 ## Preparations
 Your PYNQ version should be at least [3.0.1](http://www.pynq.io/board.html).

@@ -1,0 +1,8 @@
+# Preserve recovered bytes, including original CRLF, for the audit hashes.
+/PS/python/boot/boot.py -text
+/PS/python/boot/doa_mts.py -text
+/PS/python/boot/doa_mts.hwh -text
+/PS/python/boot/doa_mts.bit -text
+/PS/python/boot/data.mat -text
+/PS/python/multitest/* -text
+/runtime/rfsoc4x2/clocks/* -text

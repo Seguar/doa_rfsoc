@@ -13,6 +13,7 @@ import struct
 import numpy as np
 from doa_mts import *
 import scipy.io
+import os
 
 
 oled.write("RFSoC-PYNQ\nVersion {}".format(pynq.__version__))
@@ -31,7 +32,7 @@ ps_btn = GPIO(357, 'in') #  GPIO.get_gpio_base() + pin num
 
 o1 = doaMtsOverlay('doa_mts.bit')
 
-mat = scipy.io.loadmat('data.mat')
+mat = scipy.io.loadmat('/boot/data.mat')
 
 data = mat.get('sigInt16')
 o1.dac_data_mem_write(data[0], o1.dac0_player)
@@ -67,15 +68,16 @@ while True:
         oled.write("PS BTN reset\nServer Shutdown")
         break
     try:
-        commandList = o1.handle_client_connection(client_socket).split(splitSym)
-        print(commandList)
-        o1.handle_commands(commandList)
-        while o1.dataStream:    
-            data = o1.get_custom_data(o1.data_size)
-            data_binary = struct.pack('h' * o1.data_size, *data)
-            client_socket.sendall(data_binary)
+        while True:
+            commandList = o1.handle_client_connection(client_socket).split(splitSym)
+            o1.handle_commands(commandList)
+            while o1.dataStream:    
+                data = o1.get_custom_data(o1.data_size)
+                data_binary = struct.pack('h' * o1.data_size, *data)
+                client_socket.sendall(data_binary)
     except:
+        print('Reconnect or Error')
         server_socket.listen(1)
         client_socket, client_address = server_socket.accept()
-        oled.write("New connection")
+        oled.write("Reconnect or Error")
 

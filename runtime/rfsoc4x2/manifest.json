@@ -1,0 +1,118 @@
+{
+  "collection_date": "2026-11-15",
+  "identity": "device-tree RFSoC4x2; HWH xczu48dr; unique silicon ID unverified",
+  "live_process": "python3 /boot/boot.py",
+  "notebook_selection": "MultiTest/Untitled newest saved with no executed cells; MultiTest/main next with three executed cells. Latest used unverified; board clock incorrect.",
+  "files": [
+    {
+      "repository_path": "PS/python/boot/boot.py",
+      "source_path": "/boot/boot.py",
+      "source_sha256": "2ab07263bb1a5d446ed837bd374591e19527e5120472edd11ff6f771f8825c17",
+      "repository_sha256": "2ab07263bb1a5d446ed837bd374591e19527e5120472edd11ff6f771f8825c17",
+      "changes": []
+    },
+    {
+      "repository_path": "PS/python/boot/doa_mts.py",
+      "source_path": "/boot/doa_mts.py",
+      "source_sha256": "0b4991115401c759296254caea0d0f41ffdfd3edc9b7759df071186d3f01bdf4",
+      "repository_sha256": "0b4991115401c759296254caea0d0f41ffdfd3edc9b7759df071186d3f01bdf4",
+      "changes": []
+    },
+    {
+      "repository_path": "PS/python/boot/doa_mts.bit",
+      "source_path": "/boot/doa_mts.bit",
+      "source_sha256": "78e11ab2872fc3ac6252f3ec800f10d6dacd46f910e5df87446cffffee6d52d0",
+      "repository_sha256": "78e11ab2872fc3ac6252f3ec800f10d6dacd46f910e5df87446cffffee6d52d0",
+      "changes": []
+    },
+    {
+      "repository_path": "PS/python/boot/doa_mts.hwh",
+      "source_path": "/boot/doa_mts.hwh",
+      "source_sha256": "3e0c46dc4a911a0026cfc0cd22a22897acebc561816620f094a2ac5f8b2de471",
+      "repository_sha256": "3e0c46dc4a911a0026cfc0cd22a22897acebc561816620f094a2ac5f8b2de471",
+      "changes": []
+    },
+    {
+      "repository_path": "PS/python/boot/data.mat",
+      "source_path": "/boot/data.mat",
+      "source_sha256": "3f17e6cccef941d1bac4fefff4439472d8a6e6923b0ef7633e6184448be9eef3",
+      "repository_sha256": "3f17e6cccef941d1bac4fefff4439472d8a6e6923b0ef7633e6184448be9eef3",
+      "changes": []
+    },
+    {
+      "repository_path": "PS/python/multitest/main.ipynb",
+      "source_path": "MultiTest/main.ipynb",
+      "source_sha256": "e1e9f84efdd0d7fb127ac3212464b5af09c78ba8bde630cfb51cb0a143838785",
+      "repository_sha256": "7deecc9f5f200193de04ed1b278dba9e9366c79f099ee621b75de8e0245e3dad",
+      "changes": [
+        "cleared execution counts and outputs",
+        "replaced notebook bind addresses with RFSOC_BIND_IP environment lookup"
+      ]
+    },
+    {
+      "repository_path": "PS/python/multitest/Untitled.ipynb",
+      "source_path": "MultiTest/Untitled.ipynb",
+      "source_sha256": "f268dc05fb4c7e9fb428e1e216efe564b97642bf20a4d7b0ae4f03e6a2238668",
+      "repository_sha256": "58305956bbdcac1a1a40c5cd07d1f0a873493f0f3618161c319b93de3a2117c3",
+      "changes": [
+        "cleared execution counts and outputs",
+        "replaced notebook bind addresses with RFSOC_BIND_IP environment lookup"
+      ]
+    },
+    {
+      "repository_path": "PS/python/multitest/newProto.ipynb",
+      "source_path": "MultiTest/newProto.ipynb",
+      "source_sha256": "92393ccd5c48c610056f49d3bc71c02838e362da5f0cc9abcdaa64f95498117e",
+      "repository_sha256": "07e1a6088a331bb607dfd9ea5350e2b02d7a144e9c04373ba68bec92d0070bb8",
+      "changes": [
+        "cleared execution counts and outputs",
+        "replaced notebook bind addresses with RFSOC_BIND_IP environment lookup"
+      ]
+    },
+    {
+      "repository_path": "PS/python/multitest/sub.ipynb",
+      "source_path": "MultiTest/sub.ipynb",
+      "source_sha256": "aa8f72f327977d69b07412548f189d51caff3751ba5cc4aee60d0a4831f90f67",
+      "repository_sha256": "ee717763ac3626a8204c8204bccc906da1090f6835a8a7aab19d49092dc23b84",
+      "changes": [
+        "cleared execution counts and outputs",
+        "replaced notebook bind addresses with RFSOC_BIND_IP environment lookup"
+      ]
+    },
+    {
+      "repository_path": "PS/python/multitest/doa_mts.py",
+      "source_path": "MultiTest/doa_mts.py",
+      "source_sha256": "b9b27fe63f11b8af2e3338141e408bb195dad4b97be76ad8e3e4312c72a575d9",
+      "repository_sha256": "b9b27fe63f11b8af2e3338141e408bb195dad4b97be76ad8e3e4312c72a575d9",
+      "changes": []
+    },
+    {
+      "repository_path": "PS/python/multitest/doa_mts.bit",
+      "source_path": "MultiTest/doa_mts.bit",
+      "source_sha256": "78e11ab2872fc3ac6252f3ec800f10d6dacd46f910e5df87446cffffee6d52d0",
+      "repository_sha256": "78e11ab2872fc3ac6252f3ec800f10d6dacd46f910e5df87446cffffee6d52d0",
+      "changes": []
+    },
+    {
+      "repository_path": "PS/python/multitest/doa_mts.hwh",
+      "source_path": "MultiTest/doa_mts.hwh",
+      "source_sha256": "3e0c46dc4a911a0026cfc0cd22a22897acebc561816620f094a2ac5f8b2de471",
+      "repository_sha256": "3e0c46dc4a911a0026cfc0cd22a22897acebc561816620f094a2ac5f8b2de471",
+      "changes": []
+    },
+    {
+      "repository_path": "runtime/rfsoc4x2/clocks/LMK04828_500.0.txt",
+      "source_path": "installed xrfclk/LMK04828_500.0.txt",
+      "source_sha256": "0739dfa8fed42a8cf52f17ad2b939aeeb1fecbd1002fc26e783e41a2d49ef577",
+      "repository_sha256": "0739dfa8fed42a8cf52f17ad2b939aeeb1fecbd1002fc26e783e41a2d49ef577",
+      "changes": []
+    },
+    {
+      "repository_path": "runtime/rfsoc4x2/clocks/LMX2594_500.0.txt",
+      "source_path": "installed xrfclk/LMX2594_500.0.txt",
+      "source_sha256": "bfef7587b76d28bcd7f759a23ec96b659d35c62bc93e95353117f64bd9fbcdd0",
+      "repository_sha256": "bfef7587b76d28bcd7f759a23ec96b659d35c62bc93e95353117f64bd9fbcdd0",
+      "changes": []
+    }
+  ]
+}

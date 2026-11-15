@@ -1,2 +1,4 @@
 /PL/myproj
 *.log
+__pycache__/
+*.py[cod]
