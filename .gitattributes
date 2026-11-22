@@ -6,3 +6,5 @@
 /PS/python/boot/data.mat -text
 /PS/python/multitest/* -text
 /runtime/rfsoc4x2/clocks/* -text
+/PS/python/dma/doa_mts_dma.bit -text
+/PS/python/dma/doa_mts_dma.hwh -text

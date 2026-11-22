@@ -1,0 +1,56 @@
+Copyright 1986-2022 Xilinx, Inc. All Rights Reserved. Copyright 2022-2025 Advanced Micro Devices, Inc. All Rights Reserved.
+---------------------------------------------------------------------------------------------------------------------------------------------
+| Tool Version : Vivado v.2025.2 (lin64) Build 6299465 Fri Nov 14 12:34:56 MST 2025
+| Date         : Sun Nov 22 16:17:35 2026
+| Host         : pynq-build running 64-bit Ubuntu 24.04.5 LTS
+| Command      : report_drc -file out/drc.txt
+| Design       : doa_mts_wrapper
+| Device       : xczu48dr-ffvg1517-2-e
+| Speed File   : -2
+| Design State : Fully Routed
+---------------------------------------------------------------------------------------------------------------------------------------------
+
+Report DRC
+
+Table of Contents
+-----------------
+1. REPORT SUMMARY
+2. REPORT DETAILS
+
+1. REPORT SUMMARY
+-----------------
+            Netlist: netlist
+          Floorplan: impl_1
+      Design limits: <entire design considered>
+           Ruledeck: default
+             Max checks: <unlimited>
+             Checks found: 1
++-----------+----------+-------------------+--------+
+| Rule      | Severity | Description       | Checks |
++-----------+----------+-------------------+--------+
+| RTSTAT-10 | Warning  | No routable loads | 1      |
++-----------+----------+-------------------+--------+
+
+2. REPORT DETAILS
+-----------------
+RTSTAT-10#1 Warning
+No routable loads  
+225 net(s) have no routable loads. The problem bus(es) and/or net(s) are doa_mts_i/usp_rf_data_converter_1/inst/doa_mts_usp_rf_data_converter_1_0_rf_wrapper_i/STATUS_ADC0[13],
+doa_mts_i/usp_rf_data_converter_1/inst/doa_mts_usp_rf_data_converter_1_0_rf_wrapper_i/STATUS_ADC0[1],
+doa_mts_i/usp_rf_data_converter_1/inst/doa_mts_usp_rf_data_converter_1_0_rf_wrapper_i/STATUS_ADC0[4],
+doa_mts_i/usp_rf_data_converter_1/inst/doa_mts_usp_rf_data_converter_1_0_rf_wrapper_i/STATUS_ADC0[5],
+doa_mts_i/usp_rf_data_converter_1/inst/doa_mts_usp_rf_data_converter_1_0_rf_wrapper_i/STATUS_ADC0[6],
+doa_mts_i/usp_rf_data_converter_1/inst/doa_mts_usp_rf_data_converter_1_0_rf_wrapper_i/STATUS_ADC0[7],
+doa_mts_i/usp_rf_data_converter_1/inst/doa_mts_usp_rf_data_converter_1_0_rf_wrapper_i/STATUS_ADC1[13],
+doa_mts_i/usp_rf_data_converter_1/inst/doa_mts_usp_rf_data_converter_1_0_rf_wrapper_i/STATUS_ADC1[1],
+doa_mts_i/usp_rf_data_converter_1/inst/doa_mts_usp_rf_data_converter_1_0_rf_wrapper_i/STATUS_ADC1[4],
+doa_mts_i/usp_rf_data_converter_1/inst/doa_mts_usp_rf_data_converter_1_0_rf_wrapper_i/STATUS_ADC1[5],
+doa_mts_i/usp_rf_data_converter_1/inst/doa_mts_usp_rf_data_converter_1_0_rf_wrapper_i/STATUS_ADC1[6],
+doa_mts_i/usp_rf_data_converter_1/inst/doa_mts_usp_rf_data_converter_1_0_rf_wrapper_i/STATUS_ADC1[7],
+doa_mts_i/usp_rf_data_converter_1/inst/doa_mts_usp_rf_data_converter_1_0_rf_wrapper_i/STATUS_ADC2[1],
+doa_mts_i/usp_rf_data_converter_1/inst/doa_mts_usp_rf_data_converter_1_0_rf_wrapper_i/STATUS_ADC2[4],
+doa_mts_i/usp_rf_data_converter_1/inst/doa_mts_usp_rf_data_converter_1_0_rf_wrapper_i/STATUS_ADC2[5]
+ (the first 15 of 93 listed nets/buses).
+Related violations: <none>
+
+
