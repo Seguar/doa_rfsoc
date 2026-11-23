@@ -3,6 +3,7 @@
 #
 #   vivado -mode batch -source build.tcl -tclargs <variant> <stage> [jobs]
 #     variant: boot (recreated boot design)   dma (boot + AXI CDMA capture to DDR)
+#              dmasync (dma + one shared RF-clock start synchroniser for both DAC players)
 #     stage:   bd (block design + HWH only)    all (through bitstream, reports, XSA)
 #
 # Run from an empty run directory; sources are read from this script's folder.
@@ -10,7 +11,7 @@ set here [file normalize [file dirname [info script]]]
 set variant [lindex $argv 0]
 set stage   [lindex $argv 1]
 set jobs    [expr {[llength $argv] > 2 ? [lindex $argv 2] : 8}]
-if {$variant ni {boot dma}} { error "variant must be boot or dma" }
+if {$variant ni {boot dma dmasync}} { error "variant must be boot, dma or dmasync" }
 if {$stage ni {bd all}} { error "stage must be bd or all" }
 set out_name [expr {$variant eq "boot" ? "doa_mts" : "doa_mts_dma"}]
 set design doa_mts
@@ -22,6 +23,7 @@ create_project prj ./prj -part xczu48dr-ffvg1517-2-e -force
 set_property board_part realdigital.org:rfsoc4x2:part0:1.0 [current_project]
 set_property target_language Verilog [current_project]
 add_files -norecurse [glob $here/src/*.v]
+if {$variant ne "dmasync"} { remove_files [get_files */dac_start_sync.v] }
 update_compile_order -fileset sources_1
 add_files -fileset constrs_1 -norecurse $here/doa_mts_boot.xdc
 
@@ -31,10 +33,15 @@ source $here/hwh_params.tcl
 create_bd_design $design
 source $here/bd_from_hwh.tcl
 set_property CONFIG.FREQ_HZ 500000000 [get_bd_intf_ports PL_CLK]
-if {$variant eq "dma"} {
+if {$variant in {dma dmasync}} {
   source $here/add_cdma.tcl
   add_files -fileset constrs_1 -norecurse $here/doa_mts_dma.xdc
   set_property PROCESSING_ORDER LATE [get_files $here/doa_mts_dma.xdc]
+}
+if {$variant eq "dmasync"} {
+  source $here/add_dac_sync.tcl
+  add_files -fileset constrs_1 -norecurse $here/dac_sync.xdc
+  set_property PROCESSING_ORDER LATE [get_files $here/dac_sync.xdc]
 }
 validate_bd_design
 save_bd_design

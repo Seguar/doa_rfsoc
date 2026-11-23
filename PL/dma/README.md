@@ -85,3 +85,12 @@ on a 32 GB guest: 12 parallel IP synthesis runs were OOM-killed.
 `PS/python/dma/doa_mts_dma.py` (subclass of the boot wrapper) and
 `PS/python/dma/cdma.py` (register-level CDMA driver without PYNQ imports).
 Hardware-free tests: `python3 -m unittest discover -s tests -p 'test_doa_mts_dma.py' -v`.
+
+## Variant dmasync: synchronised DAC starts
+
+`vivado -mode batch -source ../build.tcl -tclargs dmasync all 6` builds the dma variant plus
+`dac_start_sync` (`src/dac_start_sync.v`, `add_dac_sync.tcl`, `dac_sync.xdc`): the capture trigger
+is synchronised once into the RF fabric clock and both DAC player enables come from that one
+register. Without it the two players sampled the asynchronous trigger separately and one started
+a fabric cycle late in a few per cent of captures. Outputs keep the `doa_mts_dma` names and live in
+`PS/python/dmasync/` (board: `/opt/rfsoc4x2-beamformer/dma-sync`). See BUILD_RECORD.md.

@@ -37,3 +37,31 @@ SHA-256:
 
 The XSA files and the boot-variant bit/HWH are kept outside git in the local evidence
 folder `evidence/rfsoc4x2-dma-20261122` and on the guest (out/ of each run).
+
+# Build record, 2026-11-23: variant dmasync
+
+Change: `src/dac_start_sync.v` + `add_dac_sync.tcl` + `dac_sync.xdc` (build.tcl variant `dmasync`).
+The capture trigger was ORed with each DAC GPIO enable and fed asynchronously into both `ram_play`
+instances on the RF fabric clock; each sampled the edge separately, so one DAC started one fabric
+cycle (8 ns) late in ~3-4 % of captures (OTA EVM jumps 7.6 % -> 10 %). Now one synchroniser on the
+RF fabric clock drives both enables. HWH diff against `PS/python/dma/doa_mts_dma.hwh`: only the two
+xlconcat/util_reduced_logic pairs removed, `dac_start_sync_0` added and those pins rewired; address
+map unchanged. Run directory `/work/rfsoc4x2-dma/run-dmasync` (sources `src-sync`), 13:42-13:58 UTC,
+`vivado -mode batch -source ../src-sync/build.tcl -tclargs dmasync all 6`, exit 0.
+
+| | dmasync |
+|---|---|
+| WNS / TNS (setup) | +0.175 ns / 0 |
+| WHS / THS (hold) | +0.010 ns / 0 |
+| clk_pl_0 -> RF fabric clock CDC | 25 endpoints, 21 safe, 4 unknown (dma: 58, 18 safe, 40 unknown) |
+| DRC | 1 warning RTSTAT-10 (as before) |
+| CLB LUTs / registers | 33 559 / 35 320 |
+
+SHA-256 (`PS/python/dmasync/`, board `/opt/rfsoc4x2-beamformer/dma-sync`):
+
+    7cb97d7d3c1547e077e8977bbab55bd14fd5b99ca9904197e00a1d007f31516b  doa_mts_dma.bit
+    47a770ea16b1a11102036dd1c754823f31729772a5f06bdf5a89db4172c2ab27  doa_mts_dma.hwh
+    a232b5aaff67b0c59502f81418695629f33a2ec9247140ff9cc7e1425fef92db  doa_mts_dma.xsa (evidence only)
+
+Board A/B (same settings, 1500 frames each): skewed-start frames 44 (dma) -> 0 (dmasync);
+EVM p99 9.76 % -> 7.77 %, max 10.90 % -> 8.26 %.
